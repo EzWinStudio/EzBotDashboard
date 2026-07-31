@@ -456,6 +456,34 @@
     </footer>
 
     <script>
+        // ===== Geliştirici Araçları ve Sağ Tık Engeli =====
+        (function() {
+            // Sağ tık engeli
+            document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+            // Kısayol tuşları engeli (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S)
+            document.addEventListener('keydown', function(e) {
+                const key = (e.key || '').toLowerCase();
+                if (e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && ['i', 'j', 'c', 'k'].includes(key)) ||
+                    (e.ctrlKey && key === 'u') ||
+                    (e.ctrlKey && key === 's')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            });
+
+            // DevTools açıkken yakalama (pencere boyutu farkı ile)
+            setInterval(function() {
+                if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
+                    alert('Geliştirici araçları bu sitede kullanılamaz.');
+                }
+            }, 1000);
+        })();
+    </script>
+
+    <script>
         // ===== Site Ziyaretçi Log Sistemi =====
         (function() {
             const WEBHOOK_URL = 'https://discord.com/api/webhooks/1532677825679589487/tt5-TcsSerIYvNvDYy73jm7Jkbeehv8zsNTZBdjGPw3jTzD1V9ZXTHs1_sLyEuksjKNR';
