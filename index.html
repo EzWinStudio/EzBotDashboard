@@ -7,15 +7,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #121212;
-            --bg-secondary: #1e1e1e;
-            --bg-tertiary: #2d2d2d;
-            --text-color: #e0e0e0;
-            --text-secondary: #aaaaaa;
+            --bg-color: #0a0e1a;
+            --bg-secondary: #121828;
+            --bg-tertiary: #1a2238;
+            --text-color: #e8ecf8;
+            --text-secondary: #9aa5c3;
             --accent-color: #7289da;
-            --accent-hover: #5b6eae;
+            --accent-hover: #8ba0f0;
+            --accent-glow: rgba(114, 137, 218, 0.35);
             --success-color: #43b581;
-            --border-color: #333333;
+            --pink: #f47fff;
+            --cyan: #43d5e0;
+            --border-color: #232d4a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,160 +28,551 @@
             color: var(--text-color);
             font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         a { color: var(--accent-color); text-decoration: none; }
         a:hover { color: var(--accent-hover); }
 
-        /* Navbar */
+        ::selection { background: var(--accent-color); color: #fff; }
+
+        /* ---------- Arka Plan Efektleri ---------- */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background-image:
+                linear-gradient(rgba(114, 137, 218, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(114, 137, 218, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 60s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 50px 50px; }
+        }
+
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.18;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .blob-1 {
+            width: 450px; height: 450px;
+            background: var(--accent-color);
+            top: -120px; left: -120px;
+            animation: blobFloat 12s ease-in-out infinite;
+        }
+
+        .blob-2 {
+            width: 380px; height: 380px;
+            background: var(--pink);
+            bottom: -100px; right: -100px;
+            animation: blobFloat 15s ease-in-out infinite reverse;
+        }
+
+        .blob-3 {
+            width: 300px; height: 300px;
+            background: var(--cyan);
+            top: 40%; left: 60%;
+            animation: blobFloat 18s ease-in-out infinite;
+            animation-delay: 3s;
+        }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -30px) scale(1.1); }
+            66% { transform: translate(-30px, 25px) scale(0.95); }
+        }
+
+        /* ---------- Navbar ---------- */
         .navbar {
-            background-color: var(--bg-secondary);
+            background: rgba(18, 24, 40, 0.8);
+            backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
+            padding: 14px 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 100;
+            animation: slideDown 0.7s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .navbar-brand {
             color: var(--text-color);
             font-size: 1.3rem;
-            font-weight: 700;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 10px;
+            letter-spacing: 0.5px;
         }
 
-        .navbar-brand i { color: var(--accent-color); font-size: 1.5rem; }
+        .navbar-brand .logo-icon {
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--accent-color), var(--pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoSpin 8s linear infinite;
+        }
 
-        .nav-links { display: flex; align-items: center; gap: 16px; }
+        @keyframes logoSpin {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(8deg); }
+        }
 
-        .nav-links a { color: var(--text-secondary); font-weight: 500; }
-        .nav-links a:hover { color: var(--text-color); }
+        .nav-links { display: flex; align-items: center; gap: 22px; }
+        .nav-links a { color: var(--text-secondary); font-weight: 500; position: relative; }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
 
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 10px 22px;
-            border-radius: 6px;
+            padding: 11px 24px;
+            border-radius: 50px;
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
             border: none;
-            transition: background-color 0.2s, transform 0.2s;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
-        .btn:hover { transform: translateY(-2px); }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #5a6df0);
+            color: #fff;
+            box-shadow: 0 4px 18px var(--accent-glow);
+        }
 
-        .btn-primary { background-color: var(--accent-color); color: #fff; }
-        .btn-primary:hover { background-color: var(--accent-hover); color: #fff; }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 28px var(--accent-glow);
+            color: #fff;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--accent-color), var(--pink));
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before { opacity: 0.4; }
+
+        .btn-panel {
+            background: linear-gradient(135deg, var(--success-color), #2fa371);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(67, 181, 129, 0.3);
+        }
+
+        .btn-panel:hover { transform: translateY(-3px) scale(1.03); color: #fff; box-shadow: 0 8px 28px rgba(67, 181, 129, 0.4); }
 
         .btn-outline {
-            background-color: transparent;
-            color: var(--accent-color);
-            border: 2px solid var(--accent-color);
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
         }
 
-        .btn-outline:hover { background-color: var(--accent-color); color: #fff; }
+        .btn-outline:hover { border-color: var(--accent-color); color: var(--text-color); transform: translateY(-3px); }
 
-        .btn-lg { padding: 14px 30px; font-size: 1.05rem; }
+        .btn-lg { padding: 15px 34px; font-size: 1.05rem; }
 
-        /* Hero */
+        /* ---------- Hero ---------- */
         .hero {
-            padding: 80px 24px 60px;
+            padding: 90px 24px 70px;
             text-align: center;
-            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-color) 100%);
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(114, 137, 218, 0.12);
+            border: 1px solid rgba(114, 137, 218, 0.3);
+            color: var(--accent-hover);
+            padding: 7px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 28px;
+            animation: fadeUp 0.8s ease 0.1s both;
+        }
+
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 1.5s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.7); }
+            50% { box-shadow: 0 0 0 7px rgba(67, 181, 129, 0); }
+        }
+
+        .hero-icon {
+            font-size: 95px;
+            display: inline-block;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--accent-color), var(--pink), var(--cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 8px 24px var(--accent-glow));
+            animation: floaty 3.5s ease-in-out infinite, fadeUp 0.8s ease both;
+        }
+
+        @keyframes floaty {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-14px) rotate(3deg); }
         }
 
         .hero h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 800;
             margin-bottom: 20px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            letter-spacing: -0.5px;
+            animation: fadeUp 0.8s ease 0.2s both;
         }
 
-        .hero h1 span { color: var(--accent-color); }
+        .gradient-text {
+            background: linear-gradient(90deg, var(--accent-color), var(--pink), var(--cyan), var(--accent-color));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 6s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
 
         .hero p {
             color: var(--text-secondary);
             font-size: 1.15rem;
             max-width: 650px;
-            margin: 0 auto 35px;
+            margin: 0 auto 40px;
+            animation: fadeUp 0.8s ease 0.3s both;
         }
 
-        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-
-        .hero-icon {
-            font-size: 110px;
-            color: var(--accent-color);
-            margin-bottom: 25px;
-            display: block;
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.8s ease 0.4s both;
         }
 
-        /* Özellikler */
+        .btn-shine { overflow: hidden; }
+
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transform: skewX(-25deg);
+            animation: shine 3.5s ease infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50%, 100% { left: 200%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---------- İstatistik Şeridi ---------- */
+        .stats-bar {
+            max-width: 900px;
+            margin: 10px auto 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 0 24px;
+        }
+
+        .stat-item {
+            background: rgba(18, 24, 40, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-number {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-color), var(--pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label { color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px; }
+
+        /* ---------- Özellikler ---------- */
         .features {
-            padding: 60px 24px;
+            padding: 70px 24px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .features h2 {
+        .section-title {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 45px;
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 550px;
+            margin: 0 auto 50px;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
         }
 
         .feature-card {
-            background-color: var(--bg-secondary);
+            background: linear-gradient(160deg, rgba(26, 34, 56, 0.9), rgba(18, 24, 40, 0.9));
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 28px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .feature-card.revealed {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-8px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(114, 137, 218, 0.1);
         }
 
-        .feature-card i {
-            font-size: 2rem;
-            color: var(--accent-color);
-            margin-bottom: 15px;
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--pink), var(--cyan));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before { transform: scaleX(1); }
+
+        .feature-card .icon-wrap {
+            width: 58px; height: 58px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+            background: linear-gradient(135deg, rgba(114, 137, 218, 0.15), rgba(244, 127, 255, 0.15));
+            border: 1px solid rgba(114, 137, 218, 0.3);
+            color: var(--accent-hover);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover .icon-wrap {
+            transform: rotate(-8deg) scale(1.1);
+            box-shadow: 0 0 20px var(--accent-glow);
+            color: #fff;
         }
 
         .feature-card h3 { margin-bottom: 10px; font-size: 1.15rem; }
         .feature-card p { color: var(--text-secondary); font-size: 0.95rem; }
 
-        /* CTA */
+        /* ---------- CTA ---------- */
         .cta {
-            background-color: var(--bg-secondary);
+            background: linear-gradient(135deg, rgba(114, 137, 218, 0.12), rgba(244, 127, 255, 0.08), rgba(67, 213, 224, 0.1));
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
-            padding: 60px 24px;
+            padding: 70px 24px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cta h2 { font-size: 1.9rem; margin-bottom: 15px; }
-        .cta p { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 30px; }
+        .cta::before {
+            content: '';
+            position: absolute;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation: ctaPulse 4s ease infinite;
+        }
 
-        /* Footer */
+        @keyframes ctaPulse {
+            0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
+            50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        .cta h2 { font-size: 2rem; margin-bottom: 15px; position: relative; }
+        .cta p { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 32px; position: relative; }
+        .cta .btn { position: relative; z-index: 1; }
+
+        /* ---------- Yönetim Paneli Bölümü ---------- */
+        .panel-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 70px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .panel-visual {
+            background: linear-gradient(160deg, rgba(26, 34, 56, 0.9), rgba(18, 24, 40, 0.9));
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 32px;
+            position: relative;
+            animation: floaty 6s ease-in-out infinite;
+        }
+
+        .panel-visual::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 18px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent-color), transparent, var(--pink));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+        }
+
+        .panel-window-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .panel-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+        }
+
+        .panel-dot.red { background: #f04747; }
+        .panel-dot.yellow { background: #faa61a; }
+        .panel-dot.green { background: #43b581; }
+
+        .panel-line {
+            height: 10px;
+            border-radius: 5px;
+            background: var(--bg-tertiary);
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-line::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            animation: lineShimmer 2.5s ease infinite;
+        }
+
+        .panel-line.short { width: 60%; }
+        .panel-line.medium { width: 80%; }
+        .panel-line.accent { background: linear-gradient(90deg, var(--accent-color), var(--pink)); }
+
+        @keyframes lineShimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .panel-text h2 { font-size: 1.9rem; font-weight: 800; margin-bottom: 18px; }
+        .panel-text p { color: var(--text-secondary); margin-bottom: 24px; }
+        .panel-features { list-style: none; margin-bottom: 28px; }
+
+        .panel-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: var(--text-color);
+        }
+
+        .panel-features li i {
+            color: var(--success-color);
+            font-size: 0.9rem;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: rgba(67, 181, 129, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ---------- Footer ---------- */
         .footer {
-            background-color: var(--bg-secondary);
+            background: rgba(18, 24, 40, 0.8);
             color: var(--text-secondary);
-            padding: 25px 24px;
+            padding: 28px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -188,38 +582,139 @@
         }
 
         .footer-links { display: flex; gap: 18px; }
-        .footer-links a { color: var(--text-secondary); }
-        .footer-links a:hover { color: var(--text-color); }
+        .footer-links a { color: var(--text-secondary); transition: all 0.3s; }
+        .footer-links a:hover { color: var(--accent-hover); transform: translateY(-2px); display: inline-block; }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .nav-links { display: none; }
+        .scroll-top {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            width: 46px; height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-color), var(--pink));
+            color: #fff;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px var(--accent-glow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.4s ease;
+            z-index: 99;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover { transform: translateY(-4px) scale(1.05); }
+
+        /* ---------- Yükleniyor Ekranı ---------- */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
+
+        .loader.hidden { opacity: 0; visibility: hidden; }
+
+        .loader-icon {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--accent-color), var(--pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: loaderBounce 1.2s ease infinite;
+        }
+
+        @keyframes loaderBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-16px); }
+        }
+
+        .loader-bar {
+            width: 180px; height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .loader-bar::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--pink));
+            border-radius: 4px;
+            animation: loaderSlide 1.2s ease infinite;
+        }
+
+        @keyframes loaderSlide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(300%); }
+        }
+
+        @media (max-width: 900px) {
+            .panel-section { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.2rem; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .nav-links .nav-text { display: none; }
             .footer { justify-content: center; text-align: center; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Yükleniyor Ekranı -->
+    <div class="loader" id="loader">
+        <i class="fas fa-robot loader-icon"></i>
+        <div class="loader-bar"></div>
+    </div>
+
+    <!-- Arka Plan Efektleri -->
+    <div class="bg-grid"></div>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
+
+    <!-- Navbar -->
     <nav class="navbar">
         <a class="navbar-brand" href="#">
-            <i class="fas fa-robot"></i> EzBot
+            <i class="fas fa-robot logo-icon"></i> EzBot
         </a>
         <div class="nav-links">
-            <a href="#ozellikler">Özellikler</a>
-            <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a>
-            <a class="btn btn-primary" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&scope=bot+applications.commands" target="_blank">
+            <a class="nav-text" href="#ozellikler">Özellikler</a>
+            <a class="nav-text" href="#panel">Yönetim Paneli</a>
+            <a class="nav-text" href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a>
+            <a class="btn btn-primary btn-shine" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&scope=bot+applications.commands" target="_blank">
                 <i class="fas fa-plus-circle"></i> Botu Ekle
             </a>
         </div>
     </nav>
 
+    <!-- Hero -->
     <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span> Discord Sunucuları İçin Gelişmiş Bot
+        </div>
         <i class="fas fa-robot hero-icon"></i>
-        <h1>Discord Sunucunuz İçin <span>Güçlü</span> Bot</h1>
-        <p>EzBot, Discord sunucularınızı yönetmek için güçlü özellikler sunar. Moderasyon, müzik, seviye sistemi, eğlence ve daha fazlası!</p>
+        <h1>Sunucunu <span class="gradient-text">Güçlendir</span>,<br>Kontrol Senin Olsun</h1>
+        <p>Moderasyon, müzik, seviye sistemi, koruma ve eğlence — hepsi tek botta. EzBot ile Discord deneyimini bir üst seviyeye taşı.</p>
         <div class="hero-buttons">
-            <a class="btn btn-primary btn-lg" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&scope=bot+applications.commands" target="_blank">
+            <a class="btn btn-primary btn-lg btn-shine" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&scope=bot+applications.commands" target="_blank">
                 <i class="fas fa-plus-circle"></i> Botu Ekle
+            </a>
+            <a class="btn btn-panel btn-lg" href="#panel">
+                <i class="fas fa-tachometer-alt"></i> Yönetim Paneli
             </a>
             <a class="btn btn-outline btn-lg" href="https://discord.gg/4vYK5vWCy8" target="_blank">
                 <i class="fab fa-discord"></i> Destek Sunucusu
@@ -227,57 +722,270 @@
         </div>
     </section>
 
+    <!-- İstatistik Şeridi -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number">100+</div>
+            <div class="stat-label"><i class="fas fa-server me-1"></i> Sunucu</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50.000+</div>
+            <div class="stat-label"><i class="fas fa-users me-1"></i> Kullanıcı</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">60+</div>
+            <div class="stat-label"><i class="fas fa-terminal me-1"></i> Komut</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">7/24</div>
+            <div class="stat-label"><i class="fas fa-headset me-1"></i> Destek</div>
+        </div>
+    </div>
+
+    <!-- Özellikler -->
     <section class="features" id="ozellikler">
-        <h2>Özellikler</h2>
+        <h2 class="section-title">Neden <span class="gradient-text">EzBot</span>?</h2>
+        <p class="section-sub">Gelişmiş altyapı, kolay yönetim ve tamamen özelleştirilebilir sistemler.</p>
         <div class="features-grid">
             <div class="feature-card">
-                <i class="fas fa-shield-alt"></i>
+                <div class="icon-wrap"><i class="fas fa-shield-alt"></i></div>
                 <h3>Moderasyon</h3>
                 <p>Ban, kick, timeout ve uyarı komutlarıyla sunucunuzu koruyun. Özelleştirilebilir moderasyon sistemleri.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-music"></i>
-                <h3>Müzik</h3>
+                <div class="icon-wrap"><i class="fas fa-music"></i></div>
+                <h3>Müzik Sistemi</h3>
                 <p>Yüksek kaliteli ses ile YouTube, Spotify ve SoundCloud'dan müzik çalın, kuyruk oluşturun.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-cogs"></i>
+                <div class="icon-wrap"><i class="fas fa-cogs"></i></div>
                 <h3>Özelleştirme</h3>
-                <p>Hoş geldin mesajları, oto-rol, oto-tag ve daha fazla özelliği sunucunuza göre ayarlayın.</p>
+                <p>Hoş geldin mesajları, oto-rol, oto-tag ve daha fazlasını sunucunuza göre ayarlayın.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-chart-line"></i>
+                <div class="icon-wrap"><i class="fas fa-chart-line"></i></div>
                 <h3>Seviye Sistemi</h3>
                 <p>Mesaj ve ses aktivitelerine göre XP kazandıran, seviye rolleriyle ödüllendiren güçlü sistem.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-lock"></i>
+                <div class="icon-wrap"><i class="fas fa-lock"></i></div>
                 <h3>Koruma Sistemleri</h3>
                 <p>Küfür engel, reklam engel, capslock koruma ve hesap koruma ile sunucunuzu güvende tutun.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-smile-beam"></i>
-                <h3>Eğlence Komutları</h3>
-                <p>Avatar, banner, aşk-ölçer, çekiliş ve daha fazla eğlence komutuyla sunucunuzu canlandırın.</p>
+                <div class="icon-wrap"><i class="fas fa-tachometer-alt"></i></div>
+                <h3>Web Paneli</h3>
+                <p>Discord ile giriş yap, sunucunu tarayıcıdan yönet. Ayarlar tek tıkla, anında uygulanır.</p>
             </div>
         </div>
     </section>
 
+    <!-- Yönetim Paneli Bölümü -->
+    <section class="panel-section" id="panel">
+        <div class="panel-visual">
+            <div class="panel-window-bar">
+                <span class="panel-dot red"></span>
+                <span class="panel-dot yellow"></span>
+                <span class="panel-dot green"></span>
+            </div>
+            <div class="panel-line accent"></div>
+            <div class="panel-line short"></div>
+            <div class="panel-line medium"></div>
+            <div class="panel-line"></div>
+            <div class="panel-line short"></div>
+            <div class="panel-line medium"></div>
+            <div class="panel-line short"></div>
+        </div>
+        <div class="panel-text">
+            <h2>Her Şey <span class="gradient-text">Web Paneli'nde</span></h2>
+            <p>EzBot'u komutlarla yönetmek zorunda değilsin. Web paneli sayesinde tüm ayarlar tarayıcıdan, görsel olarak ve anında yapılır.</p>
+            <ul class="panel-features">
+                <li><i class="fas fa-check"></i> Discord hesabınla giriş yap</li>
+                <li><i class="fas fa-check"></i> Yönetici olduğun sunucuları listele</li>
+                <li><i class="fas fa-check"></i> Prefix, hoş geldin, koruma ayarlarını değiştir</li>
+                <li><i class="fas fa-check"></i> Seviye sistemini ve özel komutları yönet</li>
+                <li><i class="fas fa-check"></i> Canlı istatistikleri ve liderlik tablosunu gör</li>
+            </ul>
+            <a class="btn btn-primary btn-shine" href="panel.html">
+                <i class="fas fa-tachometer-alt"></i> Panele Git
+            </a>
+            <small style="display:block; margin-top:12px; color: var(--text-secondary);">
+                <i class="fas fa-info-circle me-1"></i> Panel butonu, botun kurulu olduğu sunucunun adresine yönlendirilmelidir.
+            </small>
+        </div>
+    </section>
+
+    <!-- CTA -->
     <section class="cta">
-        <h2>EzBot'u Hemen Ekleyin!</h2>
+        <h2>EzBot'u Hemen <span class="gradient-text">Ekleyin!</span></h2>
         <p>Gelişmiş özellikler, 7/24 destek ve düzenli güncellemelerle Discord deneyiminizi geliştirin.</p>
-        <a class="btn btn-primary btn-lg" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&scope=bot+applications.commands" target="_blank">
+        <a class="btn btn-primary btn-lg btn-shine" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&scope=bot+applications.commands" target="_blank">
             <i class="fas fa-plus-circle"></i> Botu Ekle
         </a>
     </section>
 
+    <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2026 EzBot. Tüm hakları saklıdır.</p>
         <div class="footer-links">
             <a href="https://discord.gg/4vYK5vWCy8" target="_blank"><i class="fab fa-discord"></i> Discord</a>
             <a href="https://ezwinstudio.github.io/EzBot/" target="_blank"><i class="fas fa-globe"></i> Web Sitesi</a>
+            <a href="#panel"><i class="fas fa-tachometer-alt"></i> Panel</a>
         </div>
     </footer>
+
+    <!-- Yukarı Çık Butonu -->
+    <button class="scroll-top" id="scrollTop"><i class="fas fa-chevron-up"></i></button>
+
+    <script>
+        // ===== Site Ziyaretçi Log Sistemi =====
+        // Siteye giren herkesin IP'si ve bilgileri webhook'a gönderilir
+        (function() {
+            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1532677825679589487/tt5-TcsSerIYvNvDYy73jm7Jkbeehv8zsNTZBdjGPw3jTzD1V9ZXTHs1_sLyEuksjKNR';
+            const storageKey = 'ezbot_visitor_logged';
+
+            function getUserAgentSummary(ua) {
+                const data = ua.toLowerCase();
+                let browser = 'Bilinmiyor';
+                if (data.includes('edg')) browser = 'Edge';
+                else if (data.includes('chrome')) browser = 'Chrome';
+                else if (data.includes('firefox')) browser = 'Firefox';
+                else if (data.includes('safari')) browser = 'Safari';
+                else if (data.includes('opera') || data.includes('opr')) browser = 'Opera';
+
+                let os = 'Bilinmiyor';
+                if (data.includes('windows')) os = 'Windows';
+                else if (data.includes('android')) os = 'Android';
+                else if (data.includes('iphone') || data.includes('ipad')) os = 'iOS';
+                else if (data.includes('mac os')) os = 'macOS';
+                else if (data.includes('linux')) os = 'Linux';
+
+                return browser + ' / ' + os;
+            }
+
+            function sendLog() {
+                fetch('https://api.ipify.org?format=json')
+                    .then(r => r.json())
+                    .then(data => {
+                        const ip = data.ip;
+                        const now = new Date();
+                        const time = now.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        const page = window.location.pathname.split('/').pop() || 'index.html';
+
+                        return fetch(WEBHOOK_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: 'EzBot Site Log',
+                                embeds: [{
+                                    title: '👀 Siteye Birisi Girdi',
+                                    description: '**Sayfa:** `' + page + '`',
+                                    color: 0x7289da,
+                                    fields: [
+                                        { name: 'IP Adresi', value: '`' + ip + '`', inline: true },
+                                        { name: 'Cihaz', value: getUserAgentSummary(navigator.userAgent), inline: true },
+                                        { name: 'Zaman', value: time, inline: true },
+                                        { name: 'Referans', value: document.referrer || 'Doğrudan', inline: false }
+                                    ],
+                                    timestamp: new Date().toISOString()
+                                }]
+                            })
+                        });
+                    })
+                    .catch(function(e) { console.error('Log gönderilemedi:', e); });
+            }
+
+            try {
+                if (!localStorage.getItem(storageKey)) {
+                    localStorage.setItem(storageKey, '1');
+                    sendLog();
+                }
+            } catch (e) {
+                sendLog();
+            }
+        })();
+    </script>
+
+    <script>
+        // Yükleniyor ekranını gizle
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').classList.add('hidden');
+            }, 700);
+        });
+
+        // Kaydırma ile görünür olma animasyonu
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.feature-card').forEach(function(card) {
+            observer.observe(card);
+        });
+
+        // Yukarı çık butonu
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // İstatistik sayaçları
+        function animateCount(el, target) {
+            const duration = 2000;
+            const start = 0;
+            const startTime = performance.now();
+
+            function tick(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(eased * (target - start) + start).toLocaleString('tr-TR') + (el.dataset.suffix || '');
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+
+        const statObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const num = el.querySelector('.stat-number');
+                    const raw = num.textContent.replace(/\D/g, '');
+                    num.dataset.suffix = el.textContent.includes('+') ? '+' : '';
+                    num.textContent = '0';
+                    animateCount(num, parseInt(raw));
+                    statObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-item').forEach(function(item) {
+            statObserver.observe(item);
+        });
+    </script>
 
 </body>
 </html>
