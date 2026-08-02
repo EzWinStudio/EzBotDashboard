@@ -663,6 +663,124 @@
             100% { transform: translateX(300%); }
         }
 
+        /* ---------- Premium Bölümü ---------- */
+        .premium-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 70px 24px;
+        }
+
+        .premium-hero { text-align: center; margin-bottom: 48px; }
+        .premium-hero h2 { font-size: 2.1rem; font-weight: 800; margin-bottom: 12px; }
+        .premium-hero p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+        .premium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .premium-card {
+            background: linear-gradient(160deg, rgba(26, 34, 56, 0.95), rgba(18, 24, 40, 0.95));
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .premium-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 24px var(--accent-glow);
+        }
+
+        .premium-card .p-emoji { font-size: 2.6rem; display: block; margin-bottom: 12px; }
+        .premium-card h3 { font-size: 1.2rem; margin-bottom: 6px; }
+
+        .premium-card .p-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            flex-grow: 0;
+        }
+
+        .premium-price { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+        .premium-price .p-cur { font-size: 1.6rem; }
+        .premium-price small { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+
+        .premium-per { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 18px; }
+
+        .premium-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 22px;
+            display: grid;
+            gap: 10px;
+            flex-grow: 1;
+        }
+
+        .premium-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .premium-features li i { color: var(--success-color); margin-top: 3px; font-size: 0.85rem; }
+
+        .premium-card.popular {
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 40px var(--accent-glow);
+            transform: scale(1.03);
+        }
+
+        .premium-card.popular .popular-badge {
+            position: absolute;
+            top: 14px; right: -34px;
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, var(--accent-color), var(--pink));
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 40px;
+        }
+
+        .premium-card.popular:hover { transform: scale(1.03) translateY(-8px); }
+
+        .premium-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 48px;
+        }
+
+        .premium-feature-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .premium-feature-item:hover { border-color: var(--accent-color); transform: translateY(-4px); }
+        .premium-feature-item .f-icon { font-size: 1.5rem; margin-bottom: 10px; }
+        .premium-feature-item h4 { font-size: 1rem; margin-bottom: 6px; }
+        .premium-feature-item p { color: var(--text-secondary); font-size: 0.85rem; }
+
+        .premium-note {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
         @media (max-width: 900px) {
             .panel-section { grid-template-columns: 1fr; }
             .hero h1 { font-size: 2.2rem; }
@@ -693,6 +811,7 @@
         </a>
         <div class="nav-links">
             <a class="nav-text" href="#ozellikler">Özellikler</a>
+            <a class="nav-text" href="#premium">Premium</a>
             <a class="nav-text" href="#panel">Yönetim Paneli</a>
             <a class="nav-text" href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a>
             <a class="btn btn-primary btn-shine" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&scope=bot+applications.commands" target="_blank">
@@ -806,7 +925,7 @@
                 <li><i class="fas fa-check"></i> Seviye sistemini ve özel komutları yönet</li>
                 <li><i class="fas fa-check"></i> Canlı istatistikleri ve liderlik tablosunu gör</li>
             </ul>
-            <a class="btn btn-primary btn-shine" href="panel.html">
+            <a class="btn btn-primary btn-shine" href="http://fi3.bot-hosting.net:26083/panel.html">
                 <i class="fas fa-tachometer-alt"></i> Panele Git
             </a>
             <small style="display:block; margin-top:12px; color: var(--text-secondary);">
@@ -824,6 +943,111 @@
         </a>
     </section>
 
+    <!-- ---------- Premium Bölümü ---------- -->
+    <section class="premium-wrap" id="premium">
+        <div class="premium-hero">
+            <h2>👑 Premium <span class="gradient-text">İmkanları</span></h2>
+            <p>EzBot'u bir üst seviyeye taşıyan tüm ayrıcalıklar tek pakette. Hemen aktifleştir!</p>
+        </div>
+
+        <div class="premium-grid">
+            <!-- Aylık -->
+            <div class="premium-card">
+                <span class="p-emoji">📅</span>
+                <h3>Aylık Premium</h3>
+                <p class="p-desc">Her ay otomatik güncellenir, avantajların her daim açık kalsın.</p>
+                <div class="premium-price">49<span class="p-cur">₺</span> <small>/ ay</small></div>
+                <div class="premium-per">30 gün aktif</div>
+                <ul class="premium-features">
+                    <li><i class="fas fa-check"></i> Tüm premium avantajları</li>
+                    <li><i class="fas fa-check"></i> 24/7 müzik modu ve Bass / Nightcore / Vaporwave / 8D filtreleri</li>
+                    <li><i class="fas fa-check"></i> Günlük ödül +400-1000 🪙, çalışma 2x kazanç</li>
+                    <li><i class="fas fa-check"></i> Soygun %75 başarı, banka %10 faiz</li>
+                    <li><i class="fas fa-check"></i> 30 sayaç kanalı + özel sayaç türleri</li>
+                </ul>
+                <a class="btn btn-primary" style="width:100%;" href="https://ezwinstudio.github.io/EzBotDashboard/" target="_blank">
+                    <i class="fas fa-crown"></i> Şimdi Aktif Et
+                </a>
+            </div>
+
+            <!-- Yıllık (popüler) -->
+            <div class="premium-card popular">
+                <span class="popular-badge">EN POPÜLER</span>
+                <span class="p-emoji">🌐</span>
+                <h3>Yıllık Premium</h3>
+                <p class="p-desc">12 ay kesintisiz premium. En avantajlı seçenek!</p>
+                <div class="premium-price">499<span class="p-cur">₺</span> <small>/ yıl</small></div>
+                <div class="premium-per">365 gün aktif · 1 ay hediye</div>
+                <ul class="premium-features">
+                    <li><i class="fas fa-check"></i> 24/24 müzik + tüm ses filtreleri</li>
+                    <li><i class="fas fa-check"></i> Günlük +400-1000 🪙, çalışma 2x ve 10 dk bekleme</li>
+                    <li><i class="fas fa-check"></i> Soygun %75 başarı, banka faiz %10</li>
+                    <li><i class="fas fa-check"></i> Evcil hayvan %50 indirim, besleme 5 dk</li>
+                    <li><i class="fas fa-check"></i> Mesaj 40, duyuru 20, etkinlik 45, RSS 25 limiti</li>
+                    <li><i class="fas fa-check"></i> 30 sayaç kanalı + insan/emoji sayaç türleri</li>
+                    <li><i class="fas fa-check"></i> Öncelikli destek ve erken güncellemeler</li>
+                </ul>
+                <a class="btn btn-primary" style="width:100%;" href="https://ezwinstudio.github.io/EzBotDashboard/" target="_blank">
+                    <i class="fas fa-gem"></i> Hemen Yıllık Al
+                </a>
+            </div>
+
+            <!-- Premium Kodu -->
+            <div class="premium-card">
+                <span class="p-emoji">🎟️</span>
+                <h3>Premium Kodu</h3>
+                <p class="p-desc">Zaten bir premium kodun mu var? Hemen kullan, avantajlar devreye girsin.</p>
+                <div class="premium-price">Kod <small>Giriş</small></div>
+                <div class="premium-per">EZB-XXXX-XXXX-XXXX</div>
+                <ul class="premium-features">
+                    <li><i class="fas fa-check"></i> Satın alınca kod otomatik teslim edilir</li>
+                    <li><i class="fas fa-check"></i> Tek kullanımlık, kişiye özel</li>
+                    <li><i class="fas fa-check"></i> Panel üzerinden tek tıkla kullanılır</li>
+                </ul>
+                <a class="btn btn-outline" style="width:100%;" href="http://fi3.bot-hosting.net:26083/panel.html">
+                    <i class="fas fa-ticket-alt"></i> Kodu Kullan
+                </a>
+            </div>
+        </div>
+
+        <div class="premium-list">
+            <div class="premium-feature-item">
+                <div class="f-icon">🎵</div>
+                <h4>24/24 Müzik + Filtreler</h4>
+                <p>Bot ses kanalından asla ayrılmaz; Bass, Nightcore, Vaporwave ve 8D filtrelerini kullan.</p>
+            </div>
+            <div class="premium-feature-item">
+                <div class="f-icon">💰</div>
+                <h4>2x Ekonomi Kazancı</h4>
+                <p>Günlük ödül +400-1000 🪙, çalışma 2x kazanç ve 10 dakikalık kısa bekleme.</p>
+            </div>
+            <div class="premium-feature-item">
+                <div class="f-icon">🦹</div>
+                <h4>Soygun & Faiz</h4>
+                <p>Soygunlarda %75 başarı şansı, bankadaki faiz %10'a yükselir.</p>
+            </div>
+            <div class="premium-feature-item">
+                <div class="f-icon">🐾</div>
+                <h4>Evcil Hayvan Avantajı</h4>
+                <p>Hayvanlar %50 indirim, besleme/oynatma beklemesi 5 dakikaya düşer.</p>
+            </div>
+            <div class="premium-feature-item">
+                <div class="f-icon">⏰</div>
+                <h4>Büyük Zamanlayıcı Limitleri</h4>
+                <p>Zamanlı mesaj 40, duyuru 20, etkinlik 45, RSS 25 adede kadar.</p>
+            </div>
+            <div class="premium-feature-item">
+                <div class="f-icon">📊</div>
+                <h4>30 Sayaç Kanalı</h4>
+                <p>Sunucunda 30 farklı sayaç aç; insan, emoji gibi özel sayaç türlerini kullan.</p>
+            </div>
+        </div>
+
+        <p class="premium-note">
+            <i class="fas fa-info-circle"></i> Premium satın alınca kod Dashboard üzerinden teslim edilir, panelde otomatik aktifleşir. Sorun yaşarsan <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a>'na yaz.
+        </p>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2026 EzBot. Tüm hakları saklıdır.</p>
@@ -831,6 +1055,7 @@
             <a href="https://discord.gg/4vYK5vWCy8" target="_blank"><i class="fab fa-discord"></i> Discord</a>
             <a href="https://ezwinstudio.github.io/EzBot/" target="_blank"><i class="fas fa-globe"></i> Web Sitesi</a>
             <a href="#panel"><i class="fas fa-tachometer-alt"></i> Panel</a>
+            <a href="#premium"><i class="fas fa-crown"></i> Premium</a>
         </div>
     </footer>
 
