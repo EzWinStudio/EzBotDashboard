@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yönetim Paneli - EzBot</title>
+    <script>
+        // Statik kopya yalnızca GitHub Pages'te açılırsa, gerçek çalışan panele otomatik yönlendir.
+        // Bot panel sunucusunda (fi3.bot-hosting.net) açılırsa burada kalır ve normal çalışır.
+        (function () {
+            if (window.location.hostname !== 'fi3.bot-hosting.net') {
+                window.location.replace('http://fi3.bot-hosting.net:26083/panel');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -684,7 +693,7 @@
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Başarılı!</span></div>
 
     <footer class="footer">
-        <p>&copy; 2026 EzBot. Tüm hakları saklıdır. · <a href="index.html">Ana Sayfa</a> · <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a> · <a href="http://fi3.bot-hosting.net:26083/panel.html" target="_blank">Dashboard</a></p>
+        <p>&copy; 2026 EzBot. Tüm hakları saklıdır. · <a href="index.html">Ana Sayfa</a> · <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a> · <a href="http://fi3.bot-hosting.net:26083/panel" target="_blank">Dashboard</a></p>
     </footer>
 
     <script>
