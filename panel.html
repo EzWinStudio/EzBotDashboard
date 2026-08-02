@@ -447,6 +447,69 @@
         .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 18px; }
         .settings-grid .form-group { margin: 0; }
 
+        .setting-section, .setting-block {
+            background: linear-gradient(160deg, rgba(30, 36, 68, 0.7), rgba(17, 21, 44, 0.85));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .setting-section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+        .toggle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        .toggle-row:hover { border-color: var(--accent); }
+        .toggle-row span { display: flex; align-items: center; gap: 8px; }
+        .toggle-row input[type="checkbox"] {
+            appearance: none;
+            width: 44px;
+            height: 24px;
+            border-radius: 999px;
+            background: #33395e;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.25s;
+            flex-shrink: 0;
+        }
+        .toggle-row input[type="checkbox"]::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            top: 3px;
+            left: 3px;
+            transition: left 0.25s;
+        }
+        .toggle-row input[type="checkbox"]:checked { background: linear-gradient(90deg, var(--purple), var(--cyan)); }
+        .toggle-row input[type="checkbox"]:checked::after { left: 23px; }
+
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 22px; }
 
         .feature-card {
@@ -645,7 +708,7 @@
             <!-- AYARLAR -->
             <div class="tab-pane" id="tab-ayarlar">
                 <h3 class="section-title"><i class="fas fa-cogs" style="color:var(--orange);"></i> Sunucu Ayarları</h3>
-                <p class="section-sub">Hoş geldin mesajı ve prefix gibi temel ayarları buradan güncelle.</p>
+                <p class="section-sub">Moderasyon, karşılama, seviye ve yönetim — tüm sunucu özelliklerini buradan yönetici olarak kontrol et.</p>
                 <div class="selected-guild" id="ayarSelectedGuild">
                     <div class="guild-icon" id="ayarGuildIcon"></div>
                     <div>
@@ -655,25 +718,78 @@
                     <div class="spacer"></div>
                     <button class="btn btn-sm btn-cyan" id="ayarRefresh"><i class="fas fa-sync-alt"></i> Yenile</button>
                 </div>
+
                 <div id="ayarForm" style="display:none;">
-                    <div class="settings-grid">
-                        <div class="form-group">
-                            <label>✉️ Hoş Geldin Mesajı</label>
-                            <input type="text" id="setWelcome" placeholder="Sunucumuza hoş geldin {user}!">
-                        </div>
-                        <div class="form-group">
-                            <label>👋 Ayrılış Mesajı</label>
-                            <input type="text" id="setBye" placeholder="Ayrılıyor: {user}">
-                        </div>
-                        <div class="form-group">
-                            <label>☑️ Prefix</label>
-                            <input type="text" id="setPrefix" placeholder="!" maxlength="5">
+                    <div class="setting-section">
+                        <h4 class="setting-section-title"><i class="fas fa-hashtag" style="color:var(--cyan);"></i> Genel &amp; Karşılama</h4>
+                        <div class="settings-grid">
+                            <div class="form-group">
+                                <label>☑️ Prefix</label>
+                                <input type="text" id="setPrefix" placeholder="!" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label>📢 Karşılama Kanalı</label>
+                                <select id="setWelcomeChannel"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>✉️ Hoş Geldin Mesajı</label>
+                                <input type="text" id="setWelcome" placeholder="Sunucumuza hoş geldin {user}!">
+                            </div>
+                            <div class="form-group">
+                                <label>👋 Ayrılış Mesajı</label>
+                                <input type="text" id="setBye" placeholder="Ayrılıyor: {user}">
+                            </div>
                         </div>
                     </div>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button class="btn btn-pink" id="saveWelcome"><i class="fas fa-save"></i> Hoş Geldin Kaydet</button>
-                        <button class="btn btn-cyan" id="saveBye"><i class="fas fa-save"></i> Ayrılış Kaydet</button>
-                        <button class="btn btn-green" id="savePrefix"><i class="fas fa-save"></i> Prefix Kaydet</button>
+
+                    <div class="setting-block">
+                        <h4 class="setting-section-title"><i class="fas fa-shield-halved" style="color:var(--pink);"></i> Moderasyon & Koruma</h4>
+                        <div class="settings-grid">
+                            <div class="form-group">
+                                <label>📋 Mod Log Kanalı</label>
+                                <select id="setModLog"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🔇 Mute Rolü</label>
+                                <select id="setMuteRol"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🛡️ Oto Rol (yeni katılanlara)</label>
+                                <select id="setOtoRol"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🏷️ Oto Tag</label>
+                                <input type="text" id="setOtoTag" placeholder="[EZB]">
+                            </div>
+                        </div>
+                        <div class="toggle-grid">
+                            <label class="toggle-row"><span><i class="fas fa-biohazard"></i> Küfür Engeli</span><input type="checkbox" id="setKufur"></label>
+                            <label class="toggle-row"><span><i class="fas fa-text-height"></i> Capslock Engeli</span><input type="checkbox" id="setCapslock"></label>
+                            <label class="toggle-row"><span><i class="fas fa-bullhorn"></i> Reklam Engeli</span><input type="checkbox" id="setReklam"></label>
+                            <label class="toggle-row"><span><i class="fas fa-link"></i> Link Engeli</span><input type="checkbox" id="setLink"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-block">
+                        <h4 class="setting-section-title"><i class="fas fa-level-up-alt" style="color:var(--green);"></i> Seviye & Destek</h4>
+                        <div class="toggle-grid">
+                            <label class="toggle-row"><span><i class="fas fa-star"></i> Seviye Sistemi</span><input type="checkbox" id="setLevel"></label>
+                            <label class="toggle-row"><span><i class="fas fa-ticket-alt"></i> Destek Sistemi</span><input type="checkbox" id="setDestek"></label>
+                        </div>
+                        <div class="settings-grid" style="margin-top:14px;">
+                            <div class="form-group">
+                                <label>📡 Seviye Duyuru Kanalı</label>
+                                <select id="setLevelKanal"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🎬 Medya Kanalı</label>
+                                <select id="setMedya"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
+                        <button class="btn btn-green" id="saveAllSettings"><i class="fas fa-save"></i> Tüm Ayarları Kaydet</button>
                     </div>
                 </div>
                 <div class="empty-state" id="ayarEmpty" style="display:none;"><i class="fas fa-mouse-pointer"></i><p>Ayarları düzenlemek için yukarıdan bir sunucu seç.</p></div>
@@ -785,14 +901,16 @@
         // ===== Oturum kontrolü =====
         let girisli = false;
         let mevcutSunucu = null;
+        let mevcutKanalListe = [];
+        let mevcutRolListe = [];
         let DEMO = false;
         const DEMO_STATS = { guildCount: 142, userCount: 53184, channelCount: 512, commandCount: 60, ping: 38, uptime: 5 * 86400 + 3 * 3600 };
-        const DEMO_GUILDS = [
-            { id: '1063521847846191134', name: 'EzBot Sunucusu', icon: '', botInGuild: true },
-            { id: '982460114183029876', name: 'Discord Türkiye Geneli', icon: '', botInGuild: true },
-            { id: '1138015972445327544', name: 'Minecraft TR', icon: '', botInGuild: true },
-            { id: '901756910087344148', name: 'Yardım & Destek', icon: '', botInGuild: true },
-            { id: '1214444052626448390', name: 'Test Sunucusu', icon: '', botInGuild: false }
+const DEMO_GUILDS = [
+            { id: '1063521847846191134', name: 'EzBot Sunucusu', icon: '', memberCount: 24813, botInGuild: true },
+            { id: '982460114183029876', name: 'Discord Türkiye Geneli', icon: '', memberCount: 98112, botInGuild: true },
+            { id: '11380159722245347544', name: 'Minecraft TR', icon: '', memberCount: 4213, botInGuild: true },
+            { id: '901756910087344148', name: 'Yardım & Destek', icon: '', memberCount: 1556, botInGuild: true },
+            { id: '1214444052626448380', name: 'Test Sunucusu', icon: '', memberCount: 42, botInGuild: false }
         ];
         const DEMO_MEMBERS = [
             { username: 'EzWinYaSen', nickname: 'EzWin', bot: false, id: '1016013329660293160', roles: ['Admin'], avatar: '' },
@@ -800,6 +918,18 @@
             { username: 'DiscordBot', nickname: null, bot: true, id: '1063521844674401000', roles: [], avatar: '' },
             { username: 'PlayerOne', nickname: 'Oyunsever', bot: false, id: '1259000000000000001', roles: ['Üye'], avatar: '' },
             { username: 'NimbleFrog', nickname: 'Kurbağa', bot: false, id: '1259000000000000002', roles: ['Üye'], avatar: '' }
+        ];
+        const DEMO_CHANNELS = [
+            { id: '1064000000000000001', name: 'genel' },
+            { id: '1064000000000000002', name: 'duyurular' },
+            { id: '1064000000000000003', name: 'seviye' },
+            { id: '1064000000000000004', name: 'sohbet' }
+        ];
+        const DEMO_ROLES = [
+            { id: '1065000000000000001', name: 'Sahip' },
+            { id: '1065000000000000002', name: 'Yönetici' },
+            { id: '1065000000000000003', name: 'Moderatör' },
+            { id: '1065000000000000004', name: 'Üye' }
         ];
 
         function girisKontrol() {
@@ -898,7 +1028,7 @@
                     return;
                 }
                 list.innerHTML = guilds.map(g => `
-                    <div class="guild-card">
+                    <div class="guild-card" onclick="ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')" style="cursor:pointer;">
                         <div class="guild-head">
                             <div class="guild-icon">${g.icon ? '<img src="' + esc(g.icon) + '" alt="">' : '<i class="fas fa-server"></i>'}</div>
                             <div>
@@ -908,13 +1038,14 @@
                         </div>
                         <div class="guild-stats">
                             <span><i class="fas fa-id-badge"></i> ${esc(g.id)}</span>
+                            <span><i class="fas fa-users"></i> ${g.memberCount ? esc(g.memberCount) : '-'} üye</span>
                         </div>
                         <div class="guild-actions">
                             ${g.botInGuild ? `
-                                <button class="btn btn-primary btn-sm" onclick="uyeleriGöster('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-users"></i> Üyeler</button>
-                                <button class="btn btn-outline btn-sm" onclick="ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-cogs"></i> Ayarlar</button>
+                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); uyeleriGöster('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-users"></i> Üyeler</button>
+                                <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-cogs"></i> Ayarlar</button>
                             ` : `
-                                <button class="btn btn-outline btn-sm" onclick="showToast('Botun bu sunucuda kurulu olması gerekir', false)"><i class="fas fa-plus-circle"></i> Botu Ekle</button>
+                                <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); showToast('Botun bu sunucuda kurulu olması gerekir', false)"><i class="fas fa-plus-circle"></i> Botu Ekle</button>
                             `}
                         </div>
                     </div>
@@ -958,9 +1089,18 @@
         });
 
         // ===== Ayarlar =====
+        const kanalSecici = (current, placeholder) => '<option value="">' + esc(placeholder) + '</option>' +
+            (mevcutKanalListe || []).map(c =>
+                '<option value="' + esc(c.id) + '"' + (c.id === current ? ' selected' : '') + '>#' + esc(c.name) + '</option>'
+            ).join('');
+        const rolSecici = (current, placeholder) => '<option value="">' + esc(placeholder) + '</option>' +
+            (mevcutRolListe || []).map(r =>
+                '<option value="' + esc(r.id) + '"' + (r.id === current ? ' selected' : '') + '>@' + esc(r.name) + '</option>'
+            ).join('');
+
         function ayarlariSunucu(id, name, icon) {
             mevcutSunucu = { id, name, icon };
-            ayarlariGöster();
+            document.querySelector('.tab-btn[data-tab="ayarlar"]').click();
         }
 
         async function ayarlariGöster() {
@@ -977,13 +1117,57 @@
             $('#ayarGuildIcon').innerHTML = mevcutSunucu.icon ? '<img src="' + esc(mevcutSunucu.icon) + '">' : '<i class="fas fa-server"></i>';
 
             try {
-                const stats = DEMO
-                    ? { settings: { welcomeMessage: 'Hoş geldin {user}!', leaveMessage: 'Görüşürüz {user}!', prefix: '!' } }
-                    : await apiGet('/api/guilds/' + mevcutSunucu.id + '/stats');
-                const settings = stats.settings || {};
-                $('#setWelcome').value = settings.welcomeMessage || '';
-                $('#setBye').value = settings.leaveMessage || '';
-                $('#setPrefix').value = settings.prefix || '';
+                let stats;
+                if (DEMO) {
+                    mevcutKanalListe = DEMO_CHANNELS;
+                    mevcutRolListe = DEMO_ROLES;
+                    stats = {
+                        settings: {
+                            prefix: '!',
+                            welcomeChannel: DEMO_CHANNELS[0].id,
+                            welcomeMessage: 'Hoş geldin {user}!',
+                            leaveMessage: 'Görüşürüz {user}!',
+                            modLogChannel: '',
+                            autoRole: DEMO_ROLES[3].id,
+                            autoTag: '[EZB]',
+                            levelSystem: true,
+                            levelUpChannel: DEMO_CHANNELS[1].id,
+                            antiSwear: true,
+                            antiCapslock: false,
+                            antiAd: true,
+                            antiLink: false,
+                            supportSystem: false,
+                            mutedRole: DEMO_ROLES[1].id,
+                            mediaChannel: ''
+                        }
+                    };
+                } else {
+                    stats = await apiGet('/api/guilds/' + mevcutSunucu.id + '/stats');
+                    mevcutKanalListe = stats.channels || [];
+                    mevcutRolListe = stats.roles || [];
+                }
+
+                const s = stats.settings || {};
+                $('#setPrefix').value = s.prefix || '';
+                $('#setWelcome').value = s.welcomeMessage || '';
+                $('#setBye').value = s.leaveMessage || '';
+                $('#setOtoTag').value = s.autoTag || '';
+
+                $('#setWelcomeChannel').innerHTML = kanalSecici(s.welcomeChannel, 'Kanalsız');
+                $('#setModLog').innerHTML = kanalSecici(s.modLogChannel, 'Kapalı');
+                $('#setLevelKanal').innerHTML = kanalSecici(s.levelUpChannel, 'Kapalı');
+                $('#setMedya').innerHTML = kanalSecici(s.mediaChannel, 'Kapalı');
+
+                $('#setMuteRol').innerHTML = rolSecici(s.mutedRole, 'Rol yok');
+                $('#setOtoRol').innerHTML = rolSecici(s.autoRole, 'Rol yok');
+
+                $('#setKufur').checked = !!s.antiSwear;
+                $('#setCapslock').checked = !!s.antiCapslock;
+                $('#setReklam').checked = !!s.antiAd;
+                $('#setLink').checked = !!s.antiLink;
+                $('#setLevel').checked = !!s.levelSystem;
+                $('#setDestek').checked = !!s.supportSystem;
+
                 $('#ayarForm').style.display = 'block';
             } catch (err) {
                 $('#ayarForm').style.display = 'none';
@@ -994,32 +1178,50 @@
 
         $('#ayarRefresh').addEventListener('click', () => ayarlariGöster());
 
-        $('#saveWelcome').addEventListener('click', async () => {
+        $('#saveAllSettings').addEventListener('click', async () => {
             if (!mevcutSunucu) return;
-            const val = $('#setWelcome').value.trim();
-            try {
-                await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting: 'welcomeMessage', value: val });
-                showToast('Hoş geldin mesajı kaydedildi');
-            } catch (err) { showToast(err.message, false); }
-        });
+            if (DEMO) {
+                showToast('Statik önizleme: kayıtlar canlı sunucuda geçerlidir', false);
+                return;
+            }
+            const button = $('#saveAllSettings');
+            button.disabled = true;
 
-        $('#saveBye').addEventListener('click', async () => {
-            if (!mevcutSunucu) return;
-            const val = $('#setBye').value.trim();
-            try {
-                await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting: 'leaveMessage', value: val });
-                showToast('Ayrılış mesajı kaydedildi');
-            } catch (err) { showToast(err.message, false); }
-        });
+            const ayarListesi = [
+                ['prefix', $('#setPrefix').value.trim()],
+                ['welcomeChannel', $('#setWelcomeChannel').value],
+                ['welcomeMessage', $('#setWelcome').value.trim()],
+                ['leaveMessage', $('#setBye').value.trim()],
+                ['modLogChannel', $('#setModLog').value],
+                ['autoRole', $('#setOtoRol').value],
+                ['autoTag', $('#setOtoTag').value.trim()],
+                ['levelSystem', $('#setLevel').checked],
+                ['levelUpChannel', $('#setLevelKanal').value],
+                ['antiSwear', $('#setKufur').checked],
+                ['antiCapslock', $('#setCapslock').checked],
+                ['antiAd', $('#setReklam').checked],
+                ['antiLink', $('#setLink').checked],
+                ['supportSystem', $('#setDestek').checked],
+                ['mutedRole', $('#setMuteRol').value],
+                ['mediaChannel', $('#setMedya').value]
+            ];
 
-        $('#savePrefix').addEventListener('click', async () => {
-            if (!mevcutSunucu) return;
-            const val = $('#setPrefix').value.trim();
-            if (!val) return showToast('Prefix boş olamaz', false);
-            try {
-                await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting: 'prefix', value: val });
-                showToast('Prefix kaydedildi: ' + val);
-            } catch (err) { showToast(err.message, false); }
+            let hata = null;
+            for (const [setting, value] of ayarListesi) {
+                try {
+                    await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting, value });
+                } catch (err) {
+                    hata = err.message;
+                    break;
+                }
+            }
+
+            button.disabled = false;
+            if (hata) {
+                showToast('Kaydedilirken hata: ' + hata, false);
+            } else {
+                showToast('Tüm ayarlar kaydedildi ✓');
+            }
         });
 
         // ===== Premium =====
