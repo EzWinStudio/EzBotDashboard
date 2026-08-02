@@ -16,6 +16,8 @@
             --accent-hover: #8ba0f0;
             --accent-glow: rgba(114, 137, 218, 0.35);
             --success-color: #43b581;
+            --danger-color: #f04747;
+            --warning-color: #faa61a;
             --pink: #f47fff;
             --cyan: #43d5e0;
             --border-color: #232d4a;
@@ -41,8 +43,9 @@
             z-index: -1;
             pointer-events: none;
         }
-        .blob-1 { width: 400px; height: 400px; background: var(--accent-color); top: -100px; left: -100px; animation: blobFloat 12s ease-in-out infinite; }
-        .blob-2 { width: 350px; height: 350px; background: var(--pink); bottom: -100px; right: -100px; animation: blobFloat 15s ease-in-out infinite reverse; }
+        .blob-1 { width: 420px; height: 420px; background: var(--accent-color); top: -120px; left: -120px; animation: blobFloat 12s ease-in-out infinite; }
+        .blob-2 { width: 360px; height: 360px; background: var(--pink); bottom: -120px; right: -120px; animation: blobFloat 15s ease-in-out infinite reverse; }
+        .blob-3 { width: 320px; height: 320px; background: var(--cyan); top: 35%; left: 55%; animation: blobFloat 18s ease-in-out infinite; animation-delay: 3s; opacity: 0.1; }
 
         @keyframes blobFloat {
             0%, 100% { transform: translate(0, 0) scale(1); }
@@ -50,7 +53,6 @@
             66% { transform: translate(-30px, 25px) scale(0.95); }
         }
 
-        /* Navbar */
         .navbar {
             background: rgba(18, 24, 40, 0.8);
             backdrop-filter: blur(14px);
@@ -95,6 +97,8 @@
             transition: all 0.3s ease;
         }
 
+        .btn-sm { padding: 7px 16px; font-size: 0.85rem; }
+
         .btn-primary {
             background: linear-gradient(135deg, var(--accent-color), #5a6df0);
             color: #fff;
@@ -116,7 +120,12 @@
         }
         .btn-outline:hover { border-color: var(--accent-color); }
 
-        /* Giriş Kartı */
+        .btn-green {
+            background: linear-gradient(135deg, var(--success-color), #2fa371);
+            color: #fff;
+        }
+        .btn-green:hover { transform: translateY(-3px); color: #fff; }
+
         .login-wrap {
             min-height: calc(100vh - 65px);
             display: flex;
@@ -130,7 +139,7 @@
             border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 45px 40px;
-            max-width: 420px;
+            max-width: 460px;
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -168,18 +177,8 @@
             50% { transform: translateY(-10px); }
         }
 
-        .login-card h1 {
-            text-align: center;
-            font-size: 1.6rem;
-            margin-bottom: 8px;
-        }
-
-        .login-card p.sub {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            font-size: 0.9rem;
-        }
+        .login-card h1 { text-align: center; font-size: 1.6rem; margin-bottom: 8px; }
+        .login-card p.sub { text-align: center; color: var(--text-secondary); margin-bottom: 30px; font-size: 0.9rem; }
 
         .gradient-text {
             background: linear-gradient(90deg, var(--accent-color), var(--pink), var(--cyan));
@@ -203,7 +202,6 @@
             margin: 25px 0;
             font-size: 0.85rem;
         }
-
         .login-divider::before, .login-divider::after {
             content: '';
             flex: 1;
@@ -212,15 +210,10 @@
         }
 
         .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px; }
 
-        .form-group label {
-            display: block;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px 16px;
             background: var(--bg-tertiary);
@@ -231,11 +224,23 @@
             transition: all 0.3s;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 3px rgba(114, 137, 218, 0.2);
         }
+
+        .error-box {
+            display: none;
+            background: rgba(240, 71, 71, 0.1);
+            border: 1px solid rgba(240, 71, 71, 0.35);
+            color: #ff8b8b;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 0.9rem;
+        }
+        .error-box.show { display: block; }
 
         .login-info {
             margin-top: 25px;
@@ -248,112 +253,235 @@
             text-align: center;
         }
 
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem; transition: color 0.3s; }
         .back-link:hover { color: var(--accent-hover); }
 
-        /* Önizleme Panel (sağda gösterilen demo) */
-        .preview-wrap {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 60px 24px;
+        .panel-wrap { display: none; min-height: calc(100vh - 65px); }
+        .panel-wrap.active { display: block; }
+
+        .panel-hero {
+            background: linear-gradient(135deg, rgba(114, 137, 218, 0.15), rgba(244, 127, 255, 0.08), rgba(67, 213, 224, 0.1));
+            border-bottom: 1px solid var(--border-color);
+            padding: 34px 28px;
+            text-align: center;
+        }
+        .panel-hero h1 { font-size: 1.9rem; font-weight: 800; }
+        .panel-hero p { color: var(--text-secondary); margin-top: 6px; }
+
+        .tabs {
+            max-width: 1200px;
+            margin: 24px auto 0;
+            padding: 0 24px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .preview-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+        .tab-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
             align-items: center;
+            gap: 8px;
+        }
+        .tab-btn:hover { border-color: var(--accent-color); color: var(--text-color); }
+        .tab-btn.active { background: linear-gradient(135deg, var(--accent-color), #5a6df0); color: #fff; border-color: transparent; box-shadow: 0 4px 18px var(--accent-glow); }
+
+        .tab-content { max-width: 1200px; margin: 30px auto 60px; padding: 0 24px; min-height: 50vh; }
+        .tab-pane { display: none; animation: fadeUp 0.5s ease; }
+        .tab-pane.active { display: block; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
         }
 
-        .preview-card {
+        .stat-card {
             background: linear-gradient(160deg, rgba(26, 34, 56, 0.9), rgba(18, 24, 40, 0.9));
             border: 1px solid var(--border-color);
-            border-radius: 18px;
-            padding: 32px;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-4px); border-color: var(--accent-color); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+
+        .stat-card .stat { font-size: 1.5rem; margin-bottom: 8px; }
+        .stat-card .value { font-size: 1.5rem; font-weight: 800; }
+        .stat-card .label { color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px; }
+
+        .guild-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+        .guild-card {
+            background: linear-gradient(160deg, rgba(26, 34, 56, 0.95), rgba(18, 24, 40, 0.95));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px;
             position: relative;
             overflow: hidden;
-            animation: floaty 6s ease-in-out infinite;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+        .guild-card:hover { transform: translateY(-6px); border-color: var(--accent-color); box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(114,137,218,0.1); }
 
-        .preview-card::after {
+        .guild-card::before {
             content: '';
             position: absolute;
-            inset: -1px;
-            border-radius: 18px;
-            padding: 1px;
-            background: linear-gradient(135deg, var(--accent-color), transparent, var(--pink));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0.5;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--pink), var(--cyan));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
         }
+        .guild-card:hover::before { transform: scaleX(1); }
 
-        .preview-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .preview-dot { width: 12px; height: 12px; border-radius: 50%; }
-        .preview-dot.red { background: #f04747; }
-        .preview-dot.yellow { background: #faa61a; }
-        .preview-dot.green { background: #43b581; }
-
-        .preview-line {
-            height: 10px;
-            border-radius: 5px;
+        .guild-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+        .guild-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
             background: var(--bg-tertiary);
-            margin-bottom: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .preview-line::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-            animation: lineShimmer 2.5s ease infinite;
-        }
-
-        @keyframes lineShimmer {
-            0% { left: -100%; }
-            100% { left: 200%; }
-        }
-
-        .preview-line.short { width: 60%; }
-        .preview-line.medium { width: 80%; }
-        .preview-line.accent { background: linear-gradient(90deg, var(--accent-color), var(--pink)); }
-
-        .preview-text h2 { font-size: 1.9rem; font-weight: 800; margin-bottom: 18px; }
-        .preview-text p { color: var(--text-secondary); margin-bottom: 24px; }
-        .preview-features { list-style: none; margin-bottom: 28px; }
-
-        .preview-features li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .preview-features li i {
-            color: var(--success-color);
-            font-size: 0.9rem;
-            width: 22px; height: 22px;
-            border-radius: 50%;
-            background: rgba(67, 181, 129, 0.15);
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.4rem;
+            color: var(--accent-hover);
+            overflow: hidden;
+            flex-shrink: 0;
         }
+        .guild-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+        .guild-head h3 { font-size: 1.05rem; }
+        .guild-head p { color: var(--text-secondary); font-size: 0.85rem; }
+
+        .guild-stats { display: flex; gap: 12px; margin-bottom: 16px; color: var(--text-secondary); font-size: 0.85rem; flex-wrap: wrap; }
+        .guild-stats span { display: inline-flex; align-items: center; gap: 6px; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .badge-green { background: rgba(67, 181, 129, 0.15); color: var(--success-color); border: 1px solid rgba(67, 181, 129, 0.3); }
+        .badge-red { background: rgba(240, 71, 71, 0.15); color: var(--danger-color); border: 1px solid rgba(240, 71, 71, 0.3); }
+        .badge-gold { background: rgba(250, 166, 26, 0.15); color: var(--warning-color); border: 1px solid rgba(250, 166, 26, 0.3); }
+
+        .guild-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+        .selected-guild {
+            background: linear-gradient(160deg, rgba(26, 34, 56, 0.95), rgba(18, 24, 40, 0.95));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .selected-guild .guild-icon { width: 64px; height: 64px; border-radius: 16px; font-size: 1.8rem; }
+        .selected-guild h3 { font-size: 1.3rem; }
+        .selected-guild .spacer { flex: 1; }
+
+        .members-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+
+        .member-row {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+        }
+        .member-row:hover { border-color: var(--accent-color); }
+
+        .member-avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-hover);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .member-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .member-info { flex: 1; min-width: 0; }
+        .member-name { font-weight: 600; font-size: 0.93rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .member-sub { color: var(--text-secondary); font-size: 0.78rem; }
+
+        .member-bot-badge {
+            background: rgba(114, 137, 218, 0.2);
+            color: var(--accent-hover);
+            border-radius: 50px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .section-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+        .section-sub { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px; }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .settings-grid .form-group { margin: 0; }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 60px 0;
+            color: var(--text-secondary);
+        }
+        .loading i { font-size: 2rem; color: var(--accent-color); animation: loaderSpin 1s linear infinite; }
+        @keyframes loaderSpin { to { transform: rotate(360deg); } }
+
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-secondary); }
+        .empty-state i { font-size: 3rem; margin-bottom: 14px; color: var(--text-secondary); opacity: 0.5; }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast i { color: var(--success-color); }
 
         .footer {
             background: rgba(18, 24, 40, 0.8);
@@ -363,8 +491,9 @@
             border-top: 1px solid var(--border-color);
         }
 
-        @media (max-width: 800px) {
-            .preview-grid { grid-template-columns: 1fr; }
+        @media (max-width: 700px) {
+            .selected-guild { flex-direction: column; align-items: flex-start; }
+            .selected-guild .spacer { display: none; }
         }
     </style>
 </head>
@@ -372,183 +501,471 @@
 
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
 
-    <!-- Navbar -->
     <nav class="navbar">
         <a class="navbar-brand" href="index.html">
             <i class="fas fa-robot"></i> EzBot
         </a>
-        <div>
-            <a class="btn btn-outline" href="index.html"><i class="fas fa-home me-1"></i> Ana Sayfa</a>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <a class="btn btn-outline btn-sm" href="index.html"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a class="btn btn-outline btn-sm" href="javascript:void(0)" id="logoutBtn" style="display:none;"><i class="fas fa-sign-out-alt"></i> Çıkış</a>
         </div>
     </nav>
 
-    <!-- Giriş Kartı -->
-    <div class="login-wrap">
+    <!-- ===== GİRİŞ EKRANI ===== -->
+    <div class="login-wrap" id="loginWrap">
         <div class="login-card">
             <div class="login-icon"><i class="fas fa-robot"></i></div>
             <h1>EzBot <span class="gradient-text">Yönetim Paneli</span></h1>
-            <p class="sub">Sunucunu yönetmek için giriş yap</p>
+            <p class="sub">Sunucularını tek panelden yönet, botu istediğin gibi şekillendir</p>
 
-            <a class="btn btn-discord" href="http://fi3.bot-hosting.net:26083/auth/discord" style="width: 100%;">
+            <a class="btn btn-discord" href="javascript:void(0)" id="discordLogin" style="width: 100%;">
                 <i class="fab fa-discord"></i> Discord ile Giriş Yap
             </a>
 
-            <div class="login-divider">veya</div>
+            <div class="login-divider">veya yönetici girişi</div>
 
-            <form onsubmit="return false;">
+            <div class="error-box" id="loginError"></div>
+
+            <form id="adminLoginForm" onsubmit="return false;">
                 <div class="form-group">
                     <label>Kullanıcı Adı</label>
-                    <input type="text" placeholder="Kullanıcı adınız">
+                    <input type="text" id="adminUser" placeholder="Kullanıcı adınız">
                 </div>
                 <div class="form-group">
                     <label>Şifre</label>
-                    <input type="password" placeholder="Şifreniz">
+                    <input type="password" id="adminPass" placeholder="Şifreniz">
                 </div>
-                <button class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-sign-in-alt me-1"></i> Yönetici Girişi
+                <button class="btn btn-primary" type="submit" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Yönetici Girişi
                 </button>
             </form>
 
             <div class="login-info">
-                <i class="fas fa-info-circle me-1"></i>
-                Discord ile giriş, botun kurulu olduğu sunucuda çalışır.
+                <i class="fas fa-info-circle"></i> Discord ile giriş, botla eşlenik panel sunucusunda oturum açar. Yönetici girişi ekstra güvenlik için kullanılır.
             </div>
 
-            <a class="back-link" href="index.html"><i class="fas fa-arrow-left me-1"></i> Ana sayfaya dön</a>
+            <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Ana sayfaya dön</a>
         </div>
     </div>
 
-    <!-- Panel Önizleme -->
-    <section class="preview-wrap">
-        <div class="preview-grid">
-            <div class="preview-card">
-                <div class="preview-bar">
-                    <span class="preview-dot red"></span>
-                    <span class="preview-dot yellow"></span>
-                    <span class="preview-dot green"></span>
+    <!-- ===== GERÇEK YÖNETİM PANELİ ===== -->
+    <div class="panel-wrap" id="panelWrap">
+        <div class="panel-hero">
+            <h1>👑 EzBot <span class="gradient-text">Yönetim Konsolu</span></h1>
+            <p>Botun gücünü parmaklarının ucunda hisset <span id="panelUserTag"></span></p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="genel"><i class="fas fa-tachometer-alt"></i> Genel Bakış</button>
+            <button class="tab-btn" data-tab="sunucular"><i class="fas fa-server"></i> Sunucular</button>
+            <button class="tab-btn" data-tab="uyeler"><i class="fas fa-users"></i> Üyeler</button>
+            <button class="tab-btn" data-tab="ayarlar"><i class="fas fa-cogs"></i> Sunucu Ayarları</button>
+            <button class="tab-btn" data-tab="premium"><i class="fas fa-crown"></i> Premium</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- GENEL BAKIŞ -->
+            <div class="tab-pane active" id="tab-genel">
+                <h2 class="section-title"><i class="fas fa-tachometer-alt" style="color:var(--accent-color);"></i> Bot Genel Durumu</h2>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat"><i class="fas fa-server"></i></div><div class="value" id="statGuild">0</div><div class="label">Sunucu</div></div>
+                    <div class="stat-card"><div class="stat"><i class="fas fa-users"></i></div><div class="value" id="statUser">0</div><div class="label">Toplam Üye</div></div>
+                    <div class="stat-card"><div class="stat"><i class="fas fa-hashtag"></i></div><div class="value" id="statChannel">0</div><div class="label">Kanal</div></div>
+                    <div class="stat-card"><div class="stat"><i class="fas fa-terminal"></i></div><div class="value" id="statCommand">0</div><div class="label">Komut</div></div>
+                    <div class="stat-card"><div class="stat"><i class="fas fa-heartbeat"></i></div><div class="value" id="statPing">0</div><div class="label">Ping (ms)</div></div>
+                    <div class="stat-card"><div class="stat"><i class="fas fa-clock"></i></div><div class="value" id="statUptime">0</div><div class="label">Çalışma Süresi</div></div>
                 </div>
-                <div class="preview-line accent"></div>
-                <div class="preview-line short"></div>
-                <div class="preview-line medium"></div>
-                <div class="preview-line"></div>
-                <div class="preview-line short"></div>
+                <div class="empty-state" id="genelEmpty" style="display:none;"><i class="fas fa-info-circle"></i><p>Oturum doğrulanıyor...</p></div>
             </div>
-            <div class="preview-text">
-                <h2>Panelde <span class="gradient-text">neler var?</span></h2>
-                <p>Gerçek yönetim paneli, botla birlikte çalışan sunucuda bulunur. Bu sayfa arayüzün önizlemesidir.</p>
-                <ul class="preview-features">
-                    <li><i class="fas fa-check"></i> Sunucu ayarları: prefix, hoş geldin, koruma</li>
-                    <li><i class="fas fa-check"></i> Seviye sistemi ve liderlik tablosu</li>
-                    <li><i class="fas fa-check"></i> Özel komut yönetimi</li>
-                    <li><i class="fas fa-check"></i> Canlı istatistikler ve grafikler</li>
-                    <li><i class="fas fa-check"></i> Panel logları — kim girdi, kim çıktı</li>
-                </ul>
-                <a class="btn btn-primary" href="index.html">
-                    <i class="fas fa-plus-circle me-1"></i> Botu Ekle
-                </a>
+
+            <!-- SUNUCULAR -->
+            <div class="tab-pane" id="tab-sunucular">
+                <h2 class="section-title"><i class="fas fa-server" style="color:var(--accent-color);"></i> Yönettiğin Sunucular</h2>
+                <p class="section-sub">Discord'da yönetici olduğun sunucuları buradan görüntüle, bot kurulu olanları yönet.</p>
+                <div class="guild-grid" id="guildList"></div>
+            </div>
+
+            <!-- ÜYELER -->
+            <div class="tab-pane" id="tab-uyeler">
+                <h3 class="section-title"><i class="fas fa-users" style="color:var(--accent-color);"></i> Sunucu Üyeleri</h3>
+                <p class="section-sub">Önce yukarıdan bir sunucu seç; üyelerini burada gör.</p>
+                <div class="selected-guild" id="uyelerSelectedGuild">
+                    <div class="guild-icon" id="uyelerGuildIcon"></div>
+                    <div>
+                        <h3 id="uyelerGuildName">-</h3>
+                        <p id="uyelerGuildCount" style="color:var(--text-secondary);">-</p>
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="btn btn-sm btn-primary" id="uyelerRefresh"><i class="fas fa-sync-alt"></i> Yenile</button>
+                </div>
+                <div class="members-list" id="uyelerList">
+                    <div class="empty-state"><i class="fas fa-mouse-pointer"></i><p>Üyeleri görmek için yukarıdan bir sunucu seç.</p></div>
+                </div>
+            </div>
+
+            <!-- AYARLAR -->
+            <div class="tab-pane" id="tab-ayarlar">
+                <h3 class="section-title"><i class="fas fa-cogs" style="color:var(--accent-color);"></i> Sunucu Ayarları</h3>
+                <p class="section-sub">Hoş geldin mesajı ve prefix gibi temel ayarları buradan güncelle.</p>
+                <div class="selected-guild" id="ayarSelectedGuild">
+                    <div class="guild-icon" id="ayarGuildIcon"></div>
+                    <div>
+                        <h3 id="ayarGuildName">-</h3>
+                        <p id="ayarGuildId" style="color:var(--text-secondary);">-</p>
+                    </div>
+                    <div class="spacer"></div>
+                    <button class="btn btn-sm btn-outline" id="ayarRefresh"><i class="fas fa-sync-alt"></i> Yenile</button>
+                </div>
+                <div id="ayarForm" style="display:none;">
+                    <div class="form-group">
+                        <label>✉️ Hoş Geldin Mesajı</label>
+                        <input type="text" id="setWelcome" placeholder="Sunucumuza hoş geldin {user}!">
+                    </div>
+                    <div class="form-group">
+                        <label>👋 Ayrılış Mesajı</label>
+                        <input type="text" id="setBye" placeholder="Ayrılıyor: {user}">
+                    </div>
+                    <div class="form-group" style="max-width:220px;">
+                        <label>☑️ Prefix</label>
+                        <input type="text" id="setPrefix" placeholder="!" maxlength="5">
+                    </div>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn btn-primary" id="saveWelcome"><i class="fas fa-save"></i> Hoş Geldin Kaydet</button>
+                        <button class="btn btn-green" id="saveBye"><i class="fas fa-save"></i> Ayrılış Kaydet</button>
+                        <button class="btn btn-primary" id="savePrefix" style="background:linear-gradient(135deg,#43b581,#2fa371);"><i class="fas fa-save"></i> Prefix Kaydet</button>
+                    </div>
+                </div>
+                <div class="empty-state" id="ayarEmpty" style="display:none;"><i class="fas fa-mouse-pointer"></i><p>Ayarları düzenlemek için yukarıdan bir sunucu seç.</p></div>
+            </div>
+
+            <!-- PREMIUM -->
+            <div class="tab-pane" id="tab-premium">
+                <h3 class="section-title"><i class="fas fa-crown" style="color:var(--warning-color);"></i> Premium Yönetimi</h3>
+                <p class="section-sub">Premium kodlarını buradan yönet — /premium komutuyla aynı güç tarayıcıda.</p>
+                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+                    <div class="stat-card" style="padding:30px;">
+                        <div class="stat" style="font-size:2rem;"><i class="fas fa-ticket-alt"></i></div>
+                        <div class="label" style="font-size:1rem; margin-bottom:14px;">Kodla Premium Aktif Et</div>
+                        <input type="text" id="premiumCodeInput" placeholder="EZB-XXXX-XXXX-XXXX" style="width:100%; padding:12px 16px; background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:10px; color:var(--text-color);">
+                        <button class="btn btn-green btn-sm" style="width:100%; margin-top:12px;" id="premiumKodKullan"><i class="fas fa-check"></i> Kodu Kullan</button>
+                    </div>
+                    <div class="stat-card" style="padding:30px;">
+                        <div class="stat" style="font-size:2rem;"><i class="fas fa-bookmark"></i></div>
+                        <div class="label" style="font-weight:600;">Premium Özellikleri</div>
+                        <ul style="list-style:none; margin-top:14px; font-size:0.85rem; color:var(--text-secondary); display:grid; gap:8px; text-align:left;">
+                            <li>🎵 24/7 modu ve ses filtreleri</li>
+                            <li>💰 Günlük & çalışma 2x kazanc</li>
+                            <li>🦹 Soygun ve %10 faiz avantajı</li>
+                            <li>⏰ Yüksek zamanlayıcı limitleri</li>
+                            <li>📊 30 sayaç kanalı + özel türler</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="section-sub" style="margin-top:10px;">Premium kodun yok mu? <a href="https://ezwinstudio.github.io/EzBotDashboard/" target="_blank" style="font-weight:700;">EzBot Dashboard</a>'dan hemen al. 🛒</p>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Başarılı!</span></div>
 
     <footer class="footer">
-        <p>&copy; 2026 EzBot. Tüm hakları saklıdır. · <a href="index.html">Ana Sayfa</a> · <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a></p>
+        <p>&copy; 2026 EzBot. Tüm hakları saklıdır. · <a href="index.html">Ana Sayfa</a> · <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a> · <a href="https://ezwinstudio.github.io/EzBotDashboard/" target="_blank">Dashboard</a></p>
     </footer>
 
     <script>
-        // ===== Geliştirici Araçları ve Sağ Tık Engeli =====
-        (function() {
-            // Sağ tık engeli
-            document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        // ===== Yapılandırma =====
+        const API_BASE = window.location.origin || 'http://fi3.bot-hosting.net:26083';
 
-            // Kısayol tuşları engeli (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S)
-            document.addEventListener('keydown', function(e) {
-                const key = (e.key || '').toLowerCase();
-                if (e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && ['i', 'j', 'c', 'k'].includes(key)) ||
-                    (e.ctrlKey && key === 'u') ||
-                    (e.ctrlKey && key === 's')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
+        // ===== Yardımcılar =====
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+        }
+
+        function fmtUptime(ms) {
+            if (!ms || ms < 0) return '—';
+            const sn = Math.floor(ms / 1000);
+            const g = Math.floor(sn / 86400);
+            const s = Math.floor((sn % 86400) / 3600);
+            const d = Math.floor((sn % 3600) / 60);
+            return g + 'g ' + s + 's ' + d + 'dk';
+        }
+
+        function showToast(msg, ok) {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            const icon = t.querySelector('i');
+            t.style.borderColor = ok === false ? 'var(--danger-color)' : 'var(--border-color)';
+            icon.style.color = ok === false ? 'var(--danger-color)' : 'var(--success-color)';
+            icon.className = ok === false ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        const $ = sel => document.querySelector(sel);
+
+        // ===== API yardımcıları (otel için oturum çereziyle birlikte) =====
+        async function apiGet(url) {
+            const res = await fetch(API_BASE + url, { credentials: 'include' });
+            if (!res.ok) {
+                let msg = 'HTTP ' + res.status;
+                try { const d = await res.json(); if (d && d.error) msg = d.error; } catch (e) {}
+                throw new Error(msg);
+            }
+            return res.json();
+        }
+
+        async function apiPost(url, body) {
+            const res = await fetch(API_BASE + url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(body || {})
             });
+            if (!res.ok) {
+                let msg = 'HTTP ' + res.status;
+                try { const d = await res.json(); if (d && d.error) msg = d.error; } catch (e) {}
+                throw new Error(msg);
+            }
+            return res.json();
+        }
 
-            // DevTools açıkken yakalama (pencere boyutu farkı ile)
-            setInterval(function() {
-                if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) {
-                    alert('Geliştirici araçları bu sitede kullanılamaz.');
+        // ===== Sekmeler =====
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                $('#tab-' + btn.dataset.tab).classList.add('active');
+                if (btn.dataset.tab === 'sunucular') sunuculariYukle();
+                if (btn.dataset.tab === 'ayarlar') ayarlariGöster();
+            });
+        });
+
+        // ===== Oturum kontrolü =====
+        let girisli = false;
+        let mevcutSunucu = null;
+
+        function girisKontrol() {
+            apiGet('/api/stats').then(stats => {
+                girisli = true;
+                paneliGöster(stats);
+            }).catch(() => {
+                girisli = false;
+                $('#loginWrap').style.display = 'flex';
+                $('#panelWrap').classList.remove('active');
+                $('#logoutBtn').style.display = 'none';
+            });
+        }
+
+        function paneliGöster(stats) {
+            $('#loginWrap').style.display = 'none';
+            $('#panelWrap').classList.add('active');
+            $('#logoutBtn').style.display = 'inline-flex';
+            $('#statGuild').textContent = stats.guildCount || 0;
+            $('#statUser').textContent = (stats.userCount || 0).toLocaleString('tr-TR');
+            $('#statChannel').textContent = stats.channelCount || 0;
+            $('#statCommand').textContent = stats.commandCount || 0;
+            $('#statPing').textContent = stats.ping || 0;
+            $('#statUptime').textContent = fmtUptime(stats.uptime);
+        }
+
+        // ===== Discord ile Giriş =====
+        $('#discordLogin').addEventListener('click', () => {
+            window.location.href = API_BASE + '/auth/discord';
+        });
+
+        // ===== Yönetici Girişi =====
+        $('#adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = $('#adminUser').value.trim();
+            const pass = $('#adminPass').value.trim();
+            const errBox = $('#loginError');
+            errBox.classList.remove('show');
+
+            if (!user || !pass) {
+                errBox.textContent = 'Kullanıcı adı ve şifre gerekli!';
+                errBox.classList.add('show');
+                return;
+            }
+
+            const form = new URLSearchParams();
+            form.append('username', user);
+            form.append('password', pass);
+
+            fetch(API_BASE + '/login/admin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                credentials: 'include',
+                body: form.toString()
+            }).then(res => {
+                if (res.redirected && res.url.includes('/dashboard')) {
+                    girisKontrol();
+                } else {
+                    errBox.textContent = 'Kullanıcı adı veya şifre hatalı!';
+                    errBox.classList.add('show');
                 }
-            }, 1000);
-        })();
-    </script>
+            }).catch(() => {
+                errBox.textContent = 'Panel sunucusuna bağlanılamadı. Yönetici girişi, bot paneli ile aynı adresten yapılmalıdır.';
+                errBox.classList.add('show');
+            });
+        });
 
-    <script>
-        // ===== Site Ziyaretçi Log Sistemi =====
-        (function() {
-            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1532677825679589487/tt5-TcsSerIYvNvDYy73jm7Jkbeehv8zsNTZBdjGPw3jTzD1V9ZXTHs1_sLyEuksjKNR';
-            const storageKey = 'ezbot_panel_visited';
+        // ===== Çıkış =====
+        $('#logoutBtn').addEventListener('click', () => {
+            window.location.href = API_BASE + '/logout';
+        });
 
-            function getUserAgentSummary(ua) {
-                const data = ua.toLowerCase();
-                let browser = 'Bilinmiyor';
-                if (data.includes('edg')) browser = 'Edge';
-                else if (data.includes('chrome')) browser = 'Chrome';
-                else if (data.includes('firefox')) browser = 'Firefox';
-                else if (data.includes('safari')) browser = 'Safari';
-                else if (data.includes('opera') || data.includes('opr')) browser = 'Opera';
+        // ===== Sunucu Listesi =====
+        function sunuculariYukle() {
+            const list = $('#guildList');
+            list.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> Sunucular yükleniyor...</div>';
+            apiGet('/api/guilds').then(guilds => {
+                if (!guilds.length) {
+                    list.innerHTML = '<div class="empty-state"><i class="fas fa-server"></i><p>Yönetebileceğin sunucu yok. Botu bir sunucuya eklemeyi unutma!</p></div>';
+                    return;
+                }
+                list.innerHTML = guilds.map(g => `
+                    <div class="guild-card">
+                        <div class="guild-head">
+                            <div class="guild-icon">${g.icon ? '<img src="' + esc(g.icon) + '" alt="">' : '<i class="fas fa-server"></i>'}</div>
+                            <div>
+                                <h3>${esc(g.name)}</h3>
+                                <p>${g.botInGuild ? '<span class="badge badge-green">Bot aktif</span>' : '<span class="badge badge-red">Bot yok</span>'}</p>
+                            </div>
+                        </div>
+                        <div class="guild-stats">
+                            <span><i class="fas fa-id-badge"></i> ${esc(g.id)}</span>
+                        </div>
+                        <div class="guild-actions">
+                            ${g.botInGuild ? `
+                                <button class="btn btn-primary btn-sm" onclick="uyeleriGöster('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-users"></i> Üyeler</button>
+                                <button class="btn btn-outline btn-sm" onclick="ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-cogs"></i> Ayarlar</button>
+                            ` : `
+                                <button class="btn btn-outline btn-sm" onclick="showToast('Botun bu sunucsuda kurulu olması gerekir', false)"><i class="fas fa-plus-circle"></i> Botu Ekle</button>
+                            `}
+                        </div>
+                    </div>
+                `).join('');
+            }).catch(err => {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>' + esc(err.message) + '</p></div>';
+            });
+        }
 
-                let os = 'Bilinmiyor';
-                if (data.includes('windows')) os = 'Windows';
-                else if (data.includes('android')) os = 'Android';
-                else if (data.includes('iphone') || data.includes('ipad')) os = 'iOS';
-                else if (data.includes('mac os')) os = 'macOS';
-                else if (data.includes('linux')) os = 'Linux';
-
-                return browser + ' / ' + os;
-            }
-
-            function sendLog() {
-                fetch('https://api.ipify.org?format=json')
-                    .then(r => r.json())
-                    .then(data => {
-                        const ip = data.ip;
-                        const now = new Date();
-                        const time = now.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                        const page = window.location.pathname.split('/').pop() || 'panel.html';
-
-                        return fetch(WEBHOOK_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                username: 'EzBot Panel Log',
-                                embeds: [{
-                                    title: '🖥️ Panel Sayfası Açıldı',
-                                    description: '**Sayfa:** `' + page + '`',
-                                    color: 0x5865f2,
-                                    fields: [
-                                        { name: 'IP Adresi', value: '`' + ip + '`', inline: true },
-                                        { name: 'Cihaz', value: getUserAgentSummary(navigator.userAgent), inline: true },
-                                        { name: 'Zaman', value: time, inline: true },
-                                        { name: 'Referans', value: document.referrer || 'Doğrudan', inline: false }
-                                    ],
-                                    timestamp: new Date().toISOString()
-                                }]
-                            })
-                        });
-                    })
-                    .catch(function(e) { console.error('Log gönderilemedi:', e); });
-            }
+        // ===== Üyeler =====
+        async function uyeleriGöster(id, name, icon) {
+            mevcutSunucu = { id, name, icon };
+            $('#uyelerSelectedGuild').style.display = 'flex';
+            $('#uyelerGuildName').textContent = name;
+            $('#uyelerGuildCount').textContent = 'Üyeler yükleniyor...';
+            $('#uyelerGuildIcon').innerHTML = icon ? '<img src="' + esc(icon) + '">' : '<i class="fas fa-server"></i>';
+            const list = $('#uyelerList');
+            list.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> Üyeler yükleniyor...</div>';
+            document.querySelector('.tab-btn[data-tab="uyeler"]').click();
 
             try {
-                if (!localStorage.getItem(storageKey)) {
-                    localStorage.setItem(storageKey, '1');
-                    sendLog();
-                }
-            } catch (e) {
-                sendLog();
+                const members = await apiGet('/api/guilds/' + id + '/members');
+                $('#uyelerGuildCount').textContent = members.length + ' üye (ilk 1000 gösteriliyor)';
+                const bots = members.filter(m => m.bot).length;
+                $('#uyelerGuildCount').textContent = members.length + ' üye · ' + bots + ' bot';
+                list.innerHTML = members.map(m => `
+                    <div class="member-row">
+                        <div class="member-avatar">${m.avatar ? '<img src="' + esc(m.avatar) + '">' : '<i class="fas fa-user"></i>'}</div>
+                        <div class="member-info">
+                            <div class="member-name">${esc(m.nickname || m.username)} ${m.bot ? ' <span class="member-bot-badge">BOT</span>' : ''}</div>
+                            <div class="member-sub">${esc(m.username)} · ${m.roles.length} rol · ${esc(m.id)}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>' + esc(err.message) + '</p></div>';
             }
-        })();
+        }
+
+        $('#uyelerRefresh').addEventListener('click', () => {
+            if (mevcutSunucu) uyeleriGöster(mevcutSunucu.id, mevcutSunucu.name, mevcutSunucu.icon);
+        });
+
+        // ===== Ayarlar =====
+        function ayarlariSunucu(id, name, icon) {
+            mevcutSunucu = { id, name, icon };
+            ayarlariGöster();
+        }
+
+        async function ayarlariGöster() {
+            if (!mevcutSunucu) {
+                $('#ayarForm').style.display = 'none';
+                $('#ayarSelectedGuild').style.display = 'none';
+                $('#ayarEmpty').style.display = 'block';
+                return;
+            }
+            $('#ayarEmpty').style.display = 'none';
+            $('#ayarSelectedGuild').style.display = 'flex';
+            $('#ayarGuildName').textContent = mevcutSunucu.name;
+            $('#ayarGuildId').textContent = 'ID: ' + mevcutSunucu.id;
+            $('#ayarGuildIcon').innerHTML = mevcutSunucu.icon ? '<img src="' + esc(mevcutSunucu.icon) + '">' : '<i class="fas fa-server"></i>';
+
+            try {
+                const stats = await apiGet('/api/guilds/' + mevcutSunucu.id + '/stats');
+                const settings = stats.settings || {};
+                $('#setWelcome').value = settings.welcomeMessage || '';
+                $('#setBye').value = settings.leaveMessage || '';
+                $('#setPrefix').value = settings.prefix || '';
+                $('#ayarForm').style.display = 'block';
+            } catch (err) {
+                $('#ayarForm').style.display = 'none';
+                $('#ayarGuildName').textContent = mevcutSunucu.name + ' (ayarlar alınamadı)';
+                $('#ayarGuildId').textContent = err.message;
+            }
+        }
+
+        $('#ayarRefresh').addEventListener('click', () => ayarlariGöster());
+
+        // Hoş geldin mesajı kaydet
+        $('#saveWelcome').addEventListener('click', async () => {
+            if (!mevcutSunucu) return;
+            const val = $('#setWelcome').value.trim();
+            try {
+                await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting: 'welcomeMessage', value: val });
+                showToast('Hoş geldin mesajı kaydedildi');
+            }catch (err) { showToast(err.message, false); }
+        });
+
+        // Ayrılış mesajı kaydet
+        $('#saveBye').addEventListener('click', async () => {
+            if (!mevcutSunucu) return;
+            const val = $('#setBye').value.trim();
+            try {
+                await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting: 'leaveMessage', value: val });
+                showToast('Ayrılış mesajı kaydedildi');
+            }catch (err) { showToast(err.message, false); }
+        });
+
+        // Prefix kaydet
+        $('#savePrefix').addEventListener('click', async () => {
+            if (!mevcutSunucu) return;
+            const val = $('#setPrefix').value.trim();
+            if (!val) return showToast('Prefix boş olamaz', false);
+            try {
+                await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting: 'prefix', value: val });
+                showToast('Prefix kaydedildi: ' + val);
+            }catch (err) { showToast(err.message, false); }
+        });
+
+        // ===== Premium kod kullan (yalnızca bot sunucusunda çalışır) =====
+        $('#premiumKodKullan').addEventListener('click', async () => {
+            const kod = $('#premiumCodeInput').value.trim();
+            if (!kod) { showToast('Bir premium kodu girmelisin', false); return; }
+            // Sunucu tarafında premium kod işleyici API bulunmadığından kod kullanımını köprüler: /premium komutu.
+            // Kullanıcıya yönlendirme bilgisi ver:
+            showToast('Premium kodunu Discord üzerinden /premium komutu ile kullanabilirsin!', false);
+        });
+
+        // ===== Başlat =====
+        document.addEventListener('DOMContentLoaded', () => {
+            girisKontrol();
+        });
     </script>
 
 </body>
