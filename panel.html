@@ -4,15 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yönetim Paneli - EzBot</title>
-    <script>
-        // Statik kopya yalnızca GitHub Pages'te açılırsa, gerçek çalışan panele otomatik yönlendir.
-        // Bot panel sunucusunda (fi3.bot-hosting.net) açılırsa burada kalır ve normal çalışır.
-        (function () {
-            if (window.location.hostname !== 'fi3.bot-hosting.net') {
-                window.location.replace('http://fi3.bot-hosting.net:26083/panel');
-            }
-        })();
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -241,6 +232,29 @@
         /* ---------- Panel ---------- */
         .panel-wrap { display: none; min-height: calc(100vh - 64px); }
         .panel-wrap.active { display: block; }
+
+        .demo-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 1280px;
+            margin: 18px auto 0;
+            padding: 14px 18px;
+            background: linear-gradient(90deg, rgba(255, 180, 0, 0.14), rgba(255, 106, 0, 0.1));
+            border: 1px solid rgba(255, 180, 0, 0.35);
+            border-radius: 14px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            box-shadow: 0 6px 20px rgba(255, 170, 0, 0.08);
+        }
+        .demo-banner i { color: #ffb300; font-size: 1.2rem; }
+        .demo-banner a {
+            color: var(--cyan);
+            font-weight: 700;
+            text-decoration: underline;
+            margin-left: auto;
+            white-space: nowrap;
+        }
 
         .panel-hero {
             background: linear-gradient(135deg, rgba(114, 137, 218, 0.16), rgba(123, 98, 240, 0.12), rgba(61, 213, 240, 0.1), rgba(244, 127, 255, 0.08));
@@ -553,6 +567,9 @@
 
     <!-- ===== GERÇEK YÖNETİM PANELİ ===== -->
     <div class="panel-wrap" id="panelWrap">
+        <div class="demo-banner" id="demoBanner" style="display:none;">
+            <i class="fas fa-info-circle"></i> <b>Statik önizleme:</b> Bu GitHub sayfası panelleri örnek verilerle gösterir. Canlı veriler için bot panel sunucusunda oturum açmalısın. <a href="index.html" id="demoToHome">Ana sayfa</a>
+        </div>
         <div class="panel-hero">
             <h1>👑 EzBot <span class="gradient-text">Yönetim Konsolu</span></h1>
             <p>Botun gücünü parmaklarının ucunda hisset <span id="panelUserTag"></span></p>
@@ -693,7 +710,7 @@
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Başarılı!</span></div>
 
     <footer class="footer">
-        <p>&copy; 2026 EzBot. Tüm hakları saklıdır. · <a href="index.html">Ana Sayfa</a> · <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a> · <a href="http://fi3.bot-hosting.net:26083/panel" target="_blank">Dashboard</a></p>
+        <p>&copy; 2026 EzBot. Tüm hakları saklıdır. · <a href="index.html">Ana Sayfa</a> · <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a> · <a href="panel.html" target="_blank">Dashboard</a></p>
     </footer>
 
     <script>
@@ -768,17 +785,38 @@
         // ===== Oturum kontrolü =====
         let girisli = false;
         let mevcutSunucu = null;
+        let DEMO = false;
+        const DEMO_STATS = { guildCount: 142, userCount: 53184, channelCount: 512, commandCount: 60, ping: 38, uptime: 5 * 86400 + 3 * 3600 };
+        const DEMO_GUILDS = [
+            { id: '1063521847846191134', name: 'EzBot Sunucusu', icon: '', botInGuild: true },
+            { id: '982460114183029876', name: 'Discord Türkiye Geneli', icon: '', botInGuild: true },
+            { id: '1138015972445327544', name: 'Minecraft TR', icon: '', botInGuild: true },
+            { id: '901756910087344148', name: 'Yardım & Destek', icon: '', botInGuild: true },
+            { id: '1214444052626448390', name: 'Test Sunucusu', icon: '', botInGuild: false }
+        ];
+        const DEMO_MEMBERS = [
+            { username: 'EzWinYaSen', nickname: 'EzWin', bot: false, id: '1016013329660293160', roles: ['Admin'], avatar: '' },
+            { username: 'eziconsult', nickname: null, bot: false, id: '1254608143903125557', roles: ['Moderatör'], avatar: '' },
+            { username: 'DiscordBot', nickname: null, bot: true, id: '1063521844674401000', roles: [], avatar: '' },
+            { username: 'PlayerOne', nickname: 'Oyunsever', bot: false, id: '1259000000000000001', roles: ['Üye'], avatar: '' },
+            { username: 'NimbleFrog', nickname: 'Kurbağa', bot: false, id: '1259000000000000002', roles: ['Üye'], avatar: '' }
+        ];
 
         function girisKontrol() {
             apiGet('/api/stats').then(stats => {
                 girisli = true;
                 paneliGöster(stats);
             }).catch(() => {
-                girisli = false;
-                $('#loginWrap').style.display = 'flex';
-                $('#panelWrap').classList.remove('active');
-                $('#logoutBtn').style.display = 'none';
+                // Canlı API'ye ulaşılamıyor (GitHub Pages statik): demo modda aç
+                girisli = true;
+                demoModunuAç();
             });
+        }
+
+        function demoModunuAç() {
+            DEMO = true;
+            $('#demoBanner').style.display = 'flex';
+            paneliGöster(DEMO_STATS);
         }
 
         function paneliGöster(stats) {
@@ -795,6 +833,10 @@
 
         // ===== Discord ile Giriş =====
         $('#discordLogin').addEventListener('click', () => {
+            if (DEMO) {
+                showToast('Statik önizlemedesin — canlı giriş için bot panel sunucusunu aç', false);
+                return;
+            }
             window.location.href = API_BASE + '/auth/discord';
         });
 
@@ -836,14 +878,21 @@
 
         // ===== Çıkış =====
         $('#logoutBtn').addEventListener('click', () => {
-            window.location.href = API_BASE + '/logout';
+            if (DEMO) {
+                showToast('Statik önizleme modundasın — oturum yok', false);
+            } else {
+                window.location.href = API_BASE + '/logout';
+            }
         });
 
         // ===== Sunucu Listesi =====
         function sunuculariYukle() {
             const list = $('#guildList');
             list.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i> Sunucular yükleniyor...</div>';
-            apiGet('/api/guilds').then(guilds => {
+            const kaynak = DEMO
+                ? Promise.resolve(DEMO_GUILDS)
+                : apiGet('/api/guilds');
+            kaynak.then(guilds => {
                 if (!guilds.length) {
                     list.innerHTML = '<div class="empty-state"><i class="fas fa-server"></i><p>Yönetebileceğin sunucu yok. Botu sunucuna eklemeyi unutma!</p></div>';
                     return;
@@ -887,8 +936,7 @@
             document.querySelector('.tab-btn[data-tab="uyeler"]').click();
 
             try {
-                const members = await apiGet('/api/guilds/' + id + '/members');
-                $('#uyelerGuildCount').textContent = members.length + ' üye (ilk 1000 gösteriliyor)';
+                const members = DEMO ? DEMO_MEMBERS : await apiGet('/api/guilds/' + id + '/members');
                 const bots = members.filter(m => m.bot).length;
                 $('#uyelerGuildCount').textContent = members.length + ' üye · ' + bots + ' bot';
                 list.innerHTML = members.map(m => `
@@ -929,7 +977,9 @@
             $('#ayarGuildIcon').innerHTML = mevcutSunucu.icon ? '<img src="' + esc(mevcutSunucu.icon) + '">' : '<i class="fas fa-server"></i>';
 
             try {
-                const stats = await apiGet('/api/guilds/' + mevcutSunucu.id + '/stats');
+                const stats = DEMO
+                    ? { settings: { welcomeMessage: 'Hoş geldin {user}!', leaveMessage: 'Görüşürüz {user}!', prefix: '!' } }
+                    : await apiGet('/api/guilds/' + mevcutSunucu.id + '/stats');
                 const settings = stats.settings || {};
                 $('#setWelcome').value = settings.welcomeMessage || '';
                 $('#setBye').value = settings.leaveMessage || '';
