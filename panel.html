@@ -661,6 +661,14 @@
         <div class="tab-content">
             <!-- GENEL BAKIŞ -->
             <div class="tab-pane active" id="tab-genel">
+                <div class="selected-guild" id="adminBotBar" style="display:none;">
+                    <div class="guild-icon"><i class="fas fa-crown"></i></div>
+                    <div>
+                        <h3 id="adminBotOwner">Bot Sahibi</h3>
+                        <p>Bot sahibi görünümü aktif — tüm sunuculara tam yönetim iznin var.</p>
+                    </div>
+                    <div class="spacer"></div>
+                </div>
                 <h2 class="section-title"><i class="fas fa-tachometer-alt" style="color:var(--purple);"></i> Bot Genel Durumu</h2>
                 <div class="stats-grid">
                     <div class="stat-card sc-purple"><div class="stat"><i class="fas fa-server"></i></div><div class="value" id="statGuild">0</div><div class="label">Sunucu</div></div>
@@ -669,6 +677,12 @@
                     <div class="stat-card sc-pink"><div class="stat"><i class="fas fa-terminal"></i></div><div class="value" id="statCommand">0</div><div class="label">Komut</div></div>
                     <div class="stat-card sc-orange"><div class="stat"><i class="fas fa-heartbeat"></i></div><div class="value" id="statPing">0</div><div class="label">Ping (ms)</div></div>
                     <div class="stat-card sc-green"><div class="stat"><i class="fas fa-clock"></i></div><div class="value" id="statUptime">0</div><div class="label">Çalışma Süresi</div></div>
+                </div>
+                <div class="stats-grid" id="adminBotStats" style="display:none;">
+                    <div class="stat-card sc-purple"><div class="stat"><i class="fas fa-server"></i></div><div class="value" id="adminBotGuildCount">0</div><div class="label">Bot Sunucusu</div></div>
+                    <div class="stat-card sc-blue"><div class="stat"><i class="fas fa-users"></i></div><div class="value" id="adminBotUserCount">0</div><div class="label">Toplam Üye</div></div>
+                    <div class="stat-card sc-orange"><div class="stat"><i class="fas fa-microchip"></i></div><div class="value" id="adminBotRam">0</div><div class="label">RAM Kullanımı</div></div>
+                    <div class="stat-card sc-green"><div class="stat"><i class="fas fa-rocket"></i></div><div class="value" id="adminBotStart">—</div><div class="label">Bot Başlangıç</div></div>
                 </div>
             </div>
 
@@ -693,8 +707,8 @@
 
             <!-- SUNUCULAR -->
             <div class="tab-pane" id="tab-sunucular">
-                <h2 class="section-title"><i class="fas fa-server" style="color:var(--accent);"></i> Yönettiğin Sunucular</h2>
-                <p class="section-sub">Discord'da yönetici olduğun sunucuları listele, bot kurulu olanları yönet.</p>
+                <h2 class="section-title"><i class="fas fa-server" style="color:var(--accent);"></i> Sunucularım</h2>
+                <p class="section-sub">Üyesi olduğun ve botun kurulu olduğu sunucular listelenir. Yönetici olduğun sunucularda tam yönetim yapabilirsin.</p>
                 <div class="guild-grid" id="guildList"></div>
             </div>
 
@@ -996,6 +1010,10 @@ const DEMO_GUILDS = [
             $('#statCommand').textContent = DEMO_STATS.commandCount;
             $('#statPing').textContent = DEMO_STATS.ping;
             $('#statUptime').textContent = fmtUptime(DEMO_STATS.uptime);
+            const adminBar = $('#adminBotBar');
+            const adminStats = $('#adminBotStats');
+            if (adminBar) adminBar.style.display = 'none';
+            if (adminStats) adminStats.style.display = 'none';
         }
 
         function paneliGöster(stats) {
@@ -1008,6 +1026,25 @@ const DEMO_GUILDS = [
             $('#statCommand').textContent = stats.commandCount || 0;
             $('#statPing').textContent = stats.ping || 0;
             $('#statUptime').textContent = fmtUptime(stats.uptime);
+
+            // Yetkili (bot sahibi / panel yöneticisi) özel panel görünümü
+            const yetkili = !!(stats.isOwner || stats.isAdmin);
+            const adminBar = $('#adminBotBar');
+            const adminStats = $('#adminBotStats');
+            if (adminBar) {
+                adminBar.style.display = yetkili ? 'flex' : 'none';
+                if (yetkili) {
+                    $('#adminBotOwner').textContent = stats.isOwner ? 'Bot Sahibi' : 'Panel Yöneticisi';
+                    $('#adminBotGuildCount').textContent = stats.guildCount || 0;
+                    $('#adminBotUserCount').textContent = (stats.userCount || 0).toLocaleString('tr-TR');
+                    $('#adminBotRam').textContent = (stats.memoryUsage || 0).toFixed(1) + ' MB';
+                    $('#adminBotStart').textContent = stats.botStartTime ? new Date(stats.botStartTime).toLocaleString('tr-TR') : '—';
+                }
+            }
+            if (adminStats) adminStats.style.display = yetkili ? 'grid' : 'none';
+
+            const premiumBtn = $('#managePremiumLink');
+            if (premiumBtn) premiumBtn.style.display = yetkili ? 'inline-flex' : 'none';
         }
 
         // ===== Discord ile Giriş =====
@@ -1051,7 +1088,12 @@ const DEMO_GUILDS = [
                 body: form.toString()
             }).then(res => {
                 if (res.redirected && (res.url.includes('/panel.html') || res.url.includes('/dashboard'))) {
-                    girisKontrol();
+                    // Başarılı: fi3 tarafındaki oturumu canlı panel ile aç (GitHub kopyasındaysan tam tarama gider)
+                    if (API_BASE !== window.location.origin) {
+                        window.location.href = 'http://fi3.bot-hosting.net:26083/panel.html';
+                    } else {
+                        girisKontrol();
+                    }
                 } else {
                     errBox.textContent = 'Kullanıcı adı veya şifre hatalı!';
                     errBox.classList.add('show');
@@ -1084,20 +1126,23 @@ const DEMO_GUILDS = [
                     return;
                 }
                 list.innerHTML = guilds.map(g => {
-                    const yetkili = g.yetkili !== false;
+                    const yetkili = g.yetkili === true;
                     const butonlar = yetkili ? `
                         <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); uyeleriGöster('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-users"></i> Üyeler</button>
                         <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-cogs"></i> Ayarlar</button>
                     ` : `
-                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); showToast('Bu sunucuda yönetici yetkine yok', false)"><i class="fas fa-lock"></i> Yönetici Yetkisi Yok</button>
+                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); showToast('Bu sunucuda yönetici yetkin yok — yalnızca üyesisin', false)"><i class="fas fa-eye"></i> Sadece Üye</button>
                     `;
+                    const rozet = yetkili
+                        ? '<span class="badge badge-green">🔥 Yönetim</span>'
+                        : '<span class="badge badge-gold">👁 Üye (salt okunur)</span>';
                     return `
                         <div class="guild-card" onclick="${yetkili ? `ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')` : 'void 0'}" style="cursor:${yetkili ? 'pointer' : 'default'};">
                             <div class="guild-head">
                                 <div class="guild-icon">${g.icon ? '<img src="' + esc(g.icon) + '" alt="">' : '<i class="fas fa-server"></i>'}</div>
                                 <div>
                                     <h3>${esc(g.name)}</h3>
-                                    <p>${g.botInGuild !== false ? '<span class="badge badge-green">Bot aktif</span>' : '<span class="badge badge-red">Bot yok</span>'} ${yetkili ? '' : '<span class="badge badge-orange">Salt okunur</span>'}</p>
+                                    <p>${rozet}</p>
                                 </div>
                             </div>
                             <div class="guild-stats">
@@ -1265,13 +1310,12 @@ const DEMO_GUILDS = [
             ];
 
             let hata = null;
-            for (const [setting, value] of ayarListesi) {
-                try {
-                    await apiPost('/api/server/' + mevcutSunucu.id + '/settings', { setting, value });
-                } catch (err) {
-                    hata = err.message;
-                    break;
-                }
+            try {
+                await apiPost('/api/server/' + mevcutSunucu.id + '/settings', {
+                    settings: ayarListesi.map(([setting, value]) => ({ setting, value }))
+                });
+            } catch (err) {
+                hata = err.message;
             }
 
             button.disabled = false;
@@ -1291,6 +1335,16 @@ const DEMO_GUILDS = [
 
         // ===== Başlat =====
         document.addEventListener('DOMContentLoaded', () => {
+            // Giriş/çıkış bildirimi (fi3 OAuth buraya yönlendirir)
+            const q = new URLSearchParams(window.location.search);
+            if (q.get('giris') === '1') {
+                showToast('Başarıyla giriş yapıldı! Hoş geldin 👋');
+                // URL temizle (bildirim tekrar gösterilmesin)
+                window.history.replaceState({}, '', window.location.pathname);
+            } else if (q.get('cikis') === '1') {
+                showToast('Oturum kapatıldı. Tekrar görüşmek üzere!', false);
+                window.history.replaceState({}, '', window.location.pathname);
+            }
             girisKontrol();
         });
     </script>
