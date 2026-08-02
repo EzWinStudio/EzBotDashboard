@@ -1050,7 +1050,7 @@ const DEMO_GUILDS = [
                 credentials: 'include',
                 body: form.toString()
             }).then(res => {
-                if (res.redirected && res.url.includes('/dashboard')) {
+                if (res.redirected && (res.url.includes('/panel.html') || res.url.includes('/dashboard'))) {
                     girisKontrol();
                 } else {
                     errBox.textContent = 'Kullanıcı adı veya şifre hatalı!';
