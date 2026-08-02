@@ -598,6 +598,17 @@
             <h1>EzBot <span class="gradient-text">Yönetim Paneli</span></h1>
             <p class="sub">Moderasyon, koruma ve otomasyon — her şey tek panelde.</p>
 
+            <div class="auth-box" id="authBox" style="display:none;">
+                <i class="fas fa-shield-halved"></i>
+                <p><b>Yetkilendirme gerekiyor.</b> EzBot'u Discord'da yetkilendirip sunucuna eklemeden sunucularını burada göremezsin.</p>
+                <a class="btn btn-discord btn-lg" href="javascript:void(0)" id="inviteBtn" style="width:100%;">
+                    <i class="fab fa-discord"></i> EzBot'u Discord'da Yetkilendir
+                </a>
+                <button class="btn btn-outline btn-sm" id="demoPreview" style="width:100%; margin-top:10px; display:none;">
+                    <i class="fas fa-eye"></i> Panel Önizlemesini Gör (demo)
+                </button>
+            </div>
+
             <a class="btn btn-discord btn-lg" href="javascript:void(0)" id="discordLogin" style="width: 100%;">
                 <i class="fab fa-discord"></i> Discord ile Giriş Yap
             </a>
@@ -621,7 +632,7 @@
             </form>
 
             <div class="login-info">
-                <i class="fas fa-info-circle"></i> Discord ile giriş, bot panel sunucusunda oturum açar ve sunucularını otomatik listeler.
+                <i class="fas fa-info-circle"></i> <b>Bot yoksa:</b> önce botu Discord tarafında yetkilendir (yukarıdaki Discord butonu), sonra bu panelden giriş yap. Botun kurulu olduğu tüm sunucuların otomatik listelenir.
             </div>
 
             <a class="back-link" href="index.html"><i class="fas fa-arrow-left"></i> Ana sayfaya dön</a>
@@ -933,20 +944,58 @@ const DEMO_GUILDS = [
         ];
 
         function girisKontrol() {
+            // Adım 1 — API sunucusu canlı mı?
+            fetch(API_BASE + '/api/status', { credentials: 'include' })
+                .then(res => res.ok ? res.json() : Promise.resolve({ canli: false }))
+                .then(status => {
+                    if (status && status.canli === true) {
+                        // API erişilebilir: oturum gerekli
+                        oturumKontrol('gercek');
+                    } else {
+                        statikKopyaEkrani();
+                    }
+                })
+                .catch(() => statikKopyaEkrani());
+        }
+
+        function statikKopyaEkrani() {
+            // API'ye ulaşılamıyor (GitHub Pages / kopya): yetkilendirme kutusu + giriş
+            girisli = false;
+            $('#authBox').style.display = 'block';
+            $('#loginWrap').style.display = 'flex';
+            $('#panelWrap').classList.remove('active');
+            $('#logoutBtn').style.display = 'none';
+            $('#demoPreview').style.display = 'inline-flex';
+        }
+
+        function oturumKontrol(tip) {
             apiGet('/api/stats').then(stats => {
                 girisli = true;
                 paneliGöster(stats);
             }).catch(() => {
-                // Canlı API'ye ulaşılamıyor (GitHub Pages statik): demo modda aç
-                girisli = true;
-                demoModunuAç();
+                // API canlı ama oturum yok → sadece giriş
+                girisli = false;
+                $('#authBox').style.display = 'none';
+                $('#loginWrap').style.display = 'flex';
+                $('#panelWrap').classList.remove('active');
+                $('#logoutBtn').style.display = 'none';
+                $('#demoPreview').style.display = 'none';
             });
         }
 
+        // Demo paneli (statik önizleme) aç
         function demoModunuAç() {
             DEMO = true;
             $('#demoBanner').style.display = 'flex';
-            paneliGöster(DEMO_STATS);
+            $('#loginWrap').style.display = 'none';
+            $('#panelWrap').classList.add('active');
+            $('#logoutBtn').style.display = 'inline-flex';
+            $('#statGuild').textContent = DEMO_STATS.guildCount;
+            $('#statUser').textContent = DEMO_STATS.userCount.toLocaleString('tr-TR');
+            $('#statChannel').textContent = DEMO_STATS.channelCount;
+            $('#statCommand').textContent = DEMO_STATS.commandCount;
+            $('#statPing').textContent = DEMO_STATS.ping;
+            $('#statUptime').textContent = fmtUptime(DEMO_STATS.uptime);
         }
 
         function paneliGöster(stats) {
@@ -961,14 +1010,22 @@ const DEMO_GUILDS = [
             $('#statUptime').textContent = fmtUptime(stats.uptime);
         }
 
-        // ===== Discord ile Giriş =====
+        // ===== Discord ile Giriş / Yetkilendirme =====
+        const fi3Auth = () => API_BASE === window.location.origin
+            ? API_BASE + '/auth/discord'
+            : 'http://fi3.bot-hosting.net:26083/auth/discord';
+
         $('#discordLogin').addEventListener('click', () => {
-            if (DEMO) {
-                showToast('Statik önizlemedesin — canlı giriş için bot panel sunucusunu aç', false);
-                return;
-            }
-            window.location.href = API_BASE + '/auth/discord';
+            window.location.href = fi3Auth();
         });
+
+        // Yetkilendirme de aynı OAuth akışından geçer — callback fi3'ün
+        $('#inviteBtn').addEventListener('click', () => {
+            window.location.href = fi3Auth();
+        });
+
+        // ===== Panel Önizlemesi (demo) =====
+        $('#demoPreview').addEventListener('click', () => demoModunuAç());
 
         // ===== Yönetici Girişi =====
         $('#adminLoginForm').addEventListener('submit', function(e) {
@@ -988,7 +1045,11 @@ const DEMO_GUILDS = [
             form.append('username', user);
             form.append('password', pass);
 
-            fetch(API_BASE + '/login/admin', {
+            const loginEndPoint = API_BASE === window.location.origin
+                ? API_BASE + '/login/admin'
+                : 'http://fi3.bot-hosting.net:26083/login/admin';
+
+            fetch(loginEndPoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 credentials: 'include',
