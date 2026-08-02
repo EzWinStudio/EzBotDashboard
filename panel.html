@@ -1024,32 +1024,34 @@ const DEMO_GUILDS = [
                 : apiGet('/api/guilds');
             kaynak.then(guilds => {
                 if (!guilds.length) {
-                    list.innerHTML = '<div class="empty-state"><i class="fas fa-server"></i><p>Yönetebileceğin sunucu yok. Botu sunucuna eklemeyi unutma!</p></div>';
+                    list.innerHTML = '<div class="empty-state"><i class="fas fa-server"></i><p>Botun kurulu olduğu sunucu bulunamadı. <a href="index.html" style="color:var(--cyan); font-weight:700;">Botu sunucuna ekle</a> ve tekrar yenile.</p></div>';
                     return;
                 }
-                list.innerHTML = guilds.map(g => `
-                    <div class="guild-card" onclick="ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')" style="cursor:pointer;">
-                        <div class="guild-head">
-                            <div class="guild-icon">${g.icon ? '<img src="' + esc(g.icon) + '" alt="">' : '<i class="fas fa-server"></i>'}</div>
-                            <div>
-                                <h3>${esc(g.name)}</h3>
-                                <p>${g.botInGuild ? '<span class="badge badge-green">Bot aktif</span>' : '<span class="badge badge-red">Bot yok</span>'}</p>
+                list.innerHTML = guilds.map(g => {
+                    const yetkili = g.yetkili !== false;
+                    const butonlar = yetkili ? `
+                        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); uyeleriGöster('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-users"></i> Üyeler</button>
+                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-cogs"></i> Ayarlar</button>
+                    ` : `
+                        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); showToast('Bu sunucuda yönetici yetkine yok', false)"><i class="fas fa-lock"></i> Yönetici Yetkisi Yok</button>
+                    `;
+                    return `
+                        <div class="guild-card" onclick="${yetkili ? `ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')` : 'void 0'}" style="cursor:${yetkili ? 'pointer' : 'default'};">
+                            <div class="guild-head">
+                                <div class="guild-icon">${g.icon ? '<img src="' + esc(g.icon) + '" alt="">' : '<i class="fas fa-server"></i>'}</div>
+                                <div>
+                                    <h3>${esc(g.name)}</h3>
+                                    <p>${g.botInGuild !== false ? '<span class="badge badge-green">Bot aktif</span>' : '<span class="badge badge-red">Bot yok</span>'} ${yetkili ? '' : '<span class="badge badge-orange">Salt okunur</span>'}</p>
+                                </div>
                             </div>
+                            <div class="guild-stats">
+                                <span><i class="fas fa-id-badge"></i> ${esc(g.id)}</span>
+                                <span><i class="fas fa-users"></i> ${g.memberCount ? esc(g.memberCount) : '-'} üye</span>
+                            </div>
+                            <div class="guild-actions">${butonlar}</div>
                         </div>
-                        <div class="guild-stats">
-                            <span><i class="fas fa-id-badge"></i> ${esc(g.id)}</span>
-                            <span><i class="fas fa-users"></i> ${g.memberCount ? esc(g.memberCount) : '-'} üye</span>
-                        </div>
-                        <div class="guild-actions">
-                            ${g.botInGuild ? `
-                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); uyeleriGöster('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-users"></i> Üyeler</button>
-                                <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); ayarlariSunucu('${esc(g.id)}','${esc(g.name)}','${esc(g.icon || '')}')"><i class="fas fa-cogs"></i> Ayarlar</button>
-                            ` : `
-                                <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); showToast('Botun bu sunucuda kurulu olması gerekir', false)"><i class="fas fa-plus-circle"></i> Botu Ekle</button>
-                            `}
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }).catch(err => {
                 list.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>' + esc(err.message) + '</p></div>';
             });
