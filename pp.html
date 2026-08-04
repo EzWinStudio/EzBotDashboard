@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gizlilik Politikası - EzBot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0a0e1a;
+            --bg-secondary: #121828;
+            --bg-tertiary: #1a2238;
+            --text-color: #e8ecf8;
+            --text-secondary: #9aa5c3;
+            --accent-color: #7289da;
+            --accent-hover: #8ba0f0;
+            --success-color: #43b581;
+            --pink: #f47fff;
+            --cyan: #43d5e0;
+            --border-color: #232d4a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { color: var(--accent-hover); }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background-image:
+                linear-gradient(rgba(114, 137, 218, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(114, 137, 218, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .navbar {
+            background: rgba(18, 24, 40, 0.8);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            color: var(--text-color);
+            font-size: 1.3rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand .logo-icon {
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--accent-color), var(--pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 22px; }
+        .nav-links a { color: var(--text-secondary); font-weight: 500; }
+        .nav-links a:hover { color: var(--accent-hover); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #5a6df0);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(114, 137, 218, 0.35);
+        }
+
+        .btn-primary:hover { transform: translateY(-3px) scale(1.03); color: #fff; }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-outline:hover { border-color: var(--accent-color); color: var(--text-color); }
+
+        .page-wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 24px 80px;
+        }
+
+        .page-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--accent-color), var(--pink), var(--cyan));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 6s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .updated {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: linear-gradient(160deg, rgba(26, 34, 56, 0.85), rgba(18, 24, 40, 0.9));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px 30px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2 i { color: var(--accent-hover); font-size: 1.1rem; }
+
+        .section p, .section li { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .section ul { padding-left: 20px; display: grid; gap: 8px; }
+
+        .section strong { color: var(--text-color); }
+
+        .footer {
+            background: rgba(18, 24, 40, 0.8);
+            color: var(--text-secondary);
+            padding: 28px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-secondary); transition: all 0.3s; }
+        .footer-links a:hover { color: var(--accent-hover); }
+
+        @media (max-width: 700px) {
+            .footer { justify-content: center; text-align: center; }
+            .page-title { font-size: 1.7rem; }
+            .nav-links .nav-text { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="index.html">
+            <i class="fas fa-robot logo-icon"></i> EzBot
+        </a>
+        <div class="nav-links">
+            <a class="nav-text" href="index.html#ozellikler">Özellikler</a>
+            <a class="nav-text" href="index.html#premium">Premium</a>
+            <a class="btn btn-outline btn-sm nav-text" href="index.html"><i class="fas fa-home"></i> Ana Sayfa</a>
+            <a class="btn btn-primary" href="https://discord.gg/4vYK5vWCy8" target="_blank">
+                <i class="fab fa-discord"></i> Destek Sunucusu
+            </a>
+        </div>
+    </nav>
+
+    <div class="page-wrap">
+        <h1 class="page-title"><span class="gradient-text">Gizlilik Politikası</span></h1>
+        <p class="updated"><i class="fas fa-calendar-alt"></i> Son güncelleme: 4 Ağustos 2026</p>
+
+        <div class="section">
+            <h2><i class="fas fa-shield-halved"></i> Genel Bakış</h2>
+            <p>EzBot ("bot", "hizmet") olarak kullanıcılarımızın gizliliğine büyük önem veriyoruz. Bu Gizlilik Politikası, EzBot Discord botu ve bağlı web panelini ("https://ezwinstudio.github.io/EzBot/") kullanırken hangi verilerin toplandığını, nasıl kullanıldığını ve korunduğunu açıklar.</p>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-database"></i> Toplanan Veriler</h2>
+            <p>EzBot, hizmetin düzgün çalışabilmesi için aşağıdaki verileri toplayabilir ve saklayabilir:</p>
+            <ul>
+                <li><strong>Discord Kimliği (ID):</strong> Kullanıcı, sunucu, kanal ve rol kimlikleri; seviye, ekonomi, premium ve ayar sistemlerinin çalışması için gereklidir.</li>
+                <li><strong>Sunucu Ayarları:</strong> Prefix, karşılama mesajları, moderasyon ve koruma ayarları gibi sunucuya özel yapılandırmalar.</li>
+                <li><strong>Kullanım Verileri:</strong> XP/seviye bilgileri, ekonomi bakiyeleri (para, banka), premium süre kayıtları, sayaç ve zamanlayıcı yapılandırmaları.</li>
+                <li><strong>Panel Oturumu:</strong> Web paneline Discord ile giriş yapıldığında kimlik doğrulama amacıyla geçici oturum bilgisi ve giriş/çıkış logları.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-message"></i> Toplanmayan Veriler</h2>
+            <ul>
+                <li>Mesaj içerikleri kalıcı olarak saklanmaz; yalnızca komut çalıştırıldığı anda işlenir.</li>
+                <li>Discord şifreleri veya hesap kimlik bilgileri asla talep edilmez ve toplanmaz.</li>
+                <li>Bilgileriniz üçüncü şahıslara satılmaz veya kiralanmaz.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-bullseye"></i> Verilerin Kullanım Amacı</h2>
+            <p>Toplanan veriler yalnızca şu amaçlarla kullanılır:</p>
+            <ul>
+                <li>Bot komutlarının ve özelliklerinin çalıştırılması (seviye, ekonomi, moderasyon, premium vb.)</li>
+                <li>Web paneli üzerinden sunucu ayarlarının yönetilmesi</li>
+                <li>Hizmet kalitesinin artırılması ve hataların giderilmesi</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-clock"></i> Veri Saklama ve Silme</h2>
+            <p>Verileriniz, hizmetin kullanıldığı süre boyunca saklanır. Bot bir sunucudan çıkarıldığında veya kullanıcı aşağıdaki yollarla talepte bulunduğunda ilgili veriler silinir:</p>
+            <ul>
+                <li><strong>Veri silme talebi:</strong> <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a> üzerinden bize ulaşarak verilerinizin silinmesini talep edebilirsiniz.</li>
+                <li>Silme talepleri en geç <strong>30 gün</strong> içinde işleme alınır.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-lock"></i> Güvenlik</h2>
+            <p>Verileriniz, güvenli sunucular üzerinde ve erişim yetkisi yalnızca bot sahibine açık şekilde saklanır. Üçüncü şahıslarla paylaşılmaz.</p>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-child"></i> Çocuk Güvenliği</h2>
+            <p>EzBot, Discord'un kullanım koşullarına uygun olarak 13 yaş altı kullanıcılara hizmet vermez. Hizmeti kullanan herkesin Discord'un minimum yaş şartını karşıladığı varsayılır.</p>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-envelope"></i> İletişim</h2>
+            <p>Bu Gizlilik Politikası hakkında sorularınız için <a href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a>'na katılabilir veya aşağıdaki bağlantılardan bize ulaşabilirsiniz.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 EzBot. Tüm hakları saklıdır.</p>
+        <div class="footer-links">
+            <a href="privacy-policy.html"><i class="fas fa-shield-halved"></i> Gizlilik Politikası</a>
+            <a href="terms-of-service.html"><i class="fas fa-file-contract"></i> Kullanım Şartları</a>
+            <a href="index.html"><i class="fas fa-home"></i> Ana Sayfa</a>
+        </div>
+    </footer>
+
+</body>
+</html>
