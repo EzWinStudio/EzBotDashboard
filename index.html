@@ -713,8 +713,22 @@
         .premium-price { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
         .premium-price .p-cur { font-size: 1.6rem; }
         .premium-price small { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+        .premium-price .p-old { font-size: 1rem; color: var(--text-secondary); font-weight: 500; margin-left: 8px; text-decoration: line-through; }
 
         .premium-per { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 18px; }
+        .premium-per .p-camp { color: var(--success-color); font-weight: 700; }
+
+        .premium-card .acilis-badge {
+            position: absolute;
+            top: 14px; left: -34px;
+            transform: rotate(-45deg);
+            background: linear-gradient(135deg, #ff6b35, var(--pink));
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 40px;
+            letter-spacing: 0.5px;
+        }
 
         .premium-features {
             list-style: none;
@@ -812,8 +826,8 @@
         <div class="nav-links">
             <a class="nav-text" href="#ozellikler">Özellikler</a>
             <a class="nav-text" href="#premium">Premium</a>
-            <a class="nav-text" href="pp.html">Gizlilik Politikası</a>
-            <a class="nav-text" href="tos.html">Hizmet Koşulları</a>
+            <a class="nav-text" href="pp.html">PP</a>
+            <a class="nav-text" href="tos.html">TOS</a>
             <a class="nav-text" href="http://78.154.103.38:12147/panel" target="_blank" rel="noopener">Yönetim Paneli</a>
             <a class="nav-text" href="https://discord.gg/4vYK5vWCy8" target="_blank">Destek Sunucusu</a>
             <a class="btn btn-primary btn-shine" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&redirect_uri=http%3A%2F%2F78.154.103.38%3A12147%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=bot+applications.commands" target="_blank">
@@ -955,11 +969,12 @@
         <div class="premium-grid">
             <!-- Aylık -->
             <div class="premium-card">
+                <span class="acilis-badge">🔥 AÇILIŞA ÖZEL</span>
                 <span class="p-emoji">📅</span>
                 <h3>Aylık Premium</h3>
                 <p class="p-desc">Her ay otomatik güncellenir, avantajların her daim açık kalsın.</p>
-                <div class="premium-price">49<span class="p-cur">₺</span> <small>/ ay</small></div>
-                <div class="premium-per">30 gün aktif</div>
+                <div class="premium-price">49<span class="p-cur">₺</span> <small>/ ay</small><span class="p-old">99 ₺</span></div>
+                <div class="premium-per"><span class="p-camp">%50 İNDİRİM</span> · 30 gün aktif · açılış kampanyası</div>
                 <ul class="premium-features">
                     <li><i class="fas fa-check"></i> Tüm premium avantajları</li>
                     <li><i class="fas fa-check"></i> 24/7 müzik modu ve Bass / Nightcore / Vaporwave / 8D filtreleri</li>
@@ -975,11 +990,12 @@
             <!-- Yıllık (popüler) -->
             <div class="premium-card popular">
                 <span class="popular-badge">EN POPÜLER</span>
+                <span class="acilis-badge">🔥 AÇILIŞA ÖZEL</span>
                 <span class="p-emoji">🌐</span>
                 <h3>Yıllık Premium</h3>
                 <p class="p-desc">12 ay kesintisiz premium. En avantajlı seçenek!</p>
-                <div class="premium-price">499<span class="p-cur">₺</span> <small>/ yıl</small></div>
-                <div class="premium-per">365 gün aktif · 1 ay hediye</div>
+                <div class="premium-price">299<span class="p-cur">₺</span> <small>/ yıl</small><span class="p-old">499 ₺</span></div>
+                <div class="premium-per"><span class="p-camp">%40 İNDİRİM</span> · 365 gün aktif · 1 ay hediye</div>
                 <ul class="premium-features">
                     <li><i class="fas fa-check"></i> 24/24 müzik + tüm ses filtreleri</li>
                     <li><i class="fas fa-check"></i> Günlük +400-1000 🪙, çalışma 2x ve 10 dk bekleme</li>
@@ -1058,8 +1074,8 @@
             <a href="https://ezwinstudio.github.io/EzBot/" target="_blank"><i class="fas fa-globe"></i> Web Sitesi</a>
             <a href="http://78.154.103.38:12147/panel" target="_blank" rel="noopener"><i class="fas fa-tachometer-alt"></i> Panel</a>
             <a href="#premium"><i class="fas fa-crown"></i> Premium</a>
-            <a href="privacy-policy.html"><i class="fas fa-shield-halved"></i> Gizlilik Politikası</a>
-            <a href="terms-of-service.html"><i class="fas fa-file-contract"></i> Kullanım Şartları</a>
+            <a href="pp.html"><i class="fas fa-shield-halved"></i> Gizlilik Politikası</a>
+            <a href="tos.html"><i class="fas fa-file-contract"></i> Kullanım Şartları</a>
         </div>
     </footer>
 
