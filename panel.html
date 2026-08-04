@@ -601,7 +601,7 @@
             <div class="auth-box" id="authBox" style="display:none;">
                 <i class="fas fa-shield-halved"></i>
                 <p><b>Yetkilendirme gerekiyor.</b> EzBot'u Discord'da yetkilendirip sunucuna eklemeden sunucularını burada göremezsin.</p>
-                <a class="btn btn-discord btn-lg" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&redirect_uri=http%3A%2F%2Ffi3.bot-hosting.net%3A26083%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=bot%20applications.commands" target="_parent" rel="noopener" id="inviteBtn" style="width:100%;">
+                <a class="btn btn-discord btn-lg" href="https://discord.com/oauth2/authorize?client_id=1524064030661152869&permissions=8&redirect_uri=http%3A%2F%2F78.154.103.38%3A12147%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=bot%20applications.commands" target="_parent" rel="noopener" id="inviteBtn" style="width:100%;">
                     <i class="fab fa-discord"></i> EzBot'u Discord'da Yetkilendir
                 </a>
                 <button class="btn btn-outline btn-sm" id="demoPreview" style="width:100%; margin-top:10px; display:none;">
@@ -856,7 +856,7 @@
 
     <script>
         // ===== Yapılandırma =====
-        const API_BASE = window.location.origin || 'http://fi3.bot-hosting.net:26083';
+        const API_BASE = window.location.origin || 'http://78.154.103.38:12147';
 
         // ===== Yardımcılar =====
         function esc(s) {
@@ -1050,7 +1050,7 @@ const DEMO_GUILDS = [
         // ===== Discord ile Giriş =====
         const fi3Auth = () => API_BASE === window.location.origin
             ? API_BASE + '/auth/discord'
-            : 'http://fi3.bot-hosting.net:26083/auth/discord';
+            : 'http://78.154.103.38:12147/auth/discord';
 
         $('#discordLogin').addEventListener('click', () => {
             window.location.href = fi3Auth();
@@ -1079,7 +1079,7 @@ const DEMO_GUILDS = [
 
             const loginEndPoint = API_BASE === window.location.origin
                 ? API_BASE + '/login/admin'
-                : 'http://fi3.bot-hosting.net:26083/login/admin';
+                : 'http://78.154.103.38:12147/login/admin';
 
             fetch(loginEndPoint, {
                 method: 'POST',
@@ -1090,7 +1090,7 @@ const DEMO_GUILDS = [
                 if (res.redirected && (res.url.includes('/panel.html') || res.url.includes('/dashboard'))) {
                     // Başarılı: fi3 tarafındaki oturumu canlı panel ile aç (GitHub kopyasındaysan tam tarama gider)
                     if (API_BASE !== window.location.origin) {
-                        window.location.href = 'http://fi3.bot-hosting.net:26083/panel.html';
+                        window.location.href = 'http://78.154.103.38:12147/panel.html';
                     } else {
                         girisKontrol();
                     }
@@ -1326,11 +1326,21 @@ const DEMO_GUILDS = [
             }
         });
 
-        // ===== Premium =====
+        // ===== Premium (site üzerinden — Discord /premium'a gerek yok) =====
         $('#premiumKodKullan').addEventListener('click', async () => {
             const kod = $('#premiumCodeInput').value.trim();
             if (!kod) { showToast('Bir premium kodu girmelisin', false); return; }
-            showToast('Premium kodunu Discord üzerinden /premium komutu ile kullanabilirsin!', false);
+            if (DEMO) {
+                showToast('Statik önizleme modundasın — kodu canlı panelde kullan, Discord hesabına anında işlenir');
+                return;
+            }
+            try {
+                const d = await apiPost('/api/premium/kod-kullan', { kod });
+                showToast('Kod kullanıldı! +' + d.gun + ' gün premium hesabına eklendi ✓');
+                $('#premiumCodeInput').value = '';
+            } catch (err) {
+                showToast('Kod kullanılamadı: ' + err.message, false);
+            }
         });
 
         // ===== Başlat =====
