@@ -764,6 +764,18 @@
                                 <label>👋 Ayrılış Mesajı</label>
                                 <input type="text" id="setBye" placeholder="Ayrılıyor: {user}">
                             </div>
+                            <div class="form-group">
+                                <label>🖼️ Karşılama Görsel Kanalı</label>
+                                <select id="setWelcomeImg"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🖼️ Ayrılış Görsel Kanalı</label>
+                                <select id="setLeaveImg"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🏷️ Etiket Kanalı</label>
+                                <select id="setTagKanal"></select>
+                            </div>
                         </div>
                     </div>
 
@@ -783,8 +795,16 @@
                                 <select id="setOtoRol"></select>
                             </div>
                             <div class="form-group">
+                                <label>🤖 Oto Rol (botlara)</label>
+                                <select id="setBotRol"></select>
+                            </div>
+                            <div class="form-group">
                                 <label>🏷️ Oto Tag</label>
                                 <input type="text" id="setOtoTag" placeholder="[EZB]">
+                            </div>
+                            <div class="form-group">
+                                <label>💬 Öneri Kanalı</label>
+                                <select id="setOneriKanal"></select>
                             </div>
                         </div>
                         <div class="toggle-grid">
@@ -792,11 +812,44 @@
                             <label class="toggle-row"><span><i class="fas fa-text-height"></i> Capslock Engeli</span><input type="checkbox" id="setCapslock"></label>
                             <label class="toggle-row"><span><i class="fas fa-bullhorn"></i> Reklam Engeli</span><input type="checkbox" id="setReklam"></label>
                             <label class="toggle-row"><span><i class="fas fa-link"></i> Link Engeli</span><input type="checkbox" id="setLink"></label>
+                            <label class="toggle-row"><span><i class="fas fa-bolt"></i> Spam Engeli</span><input type="checkbox" id="setSpam"></label>
+                            <label class="toggle-row"><span><i class="fas fa-file-image"></i> Gif Engeli</span><input type="checkbox" id="setGif"></label>
+                            <label class="toggle-row"><span><i class="fas fa-user-shield"></i> Hesap Koruma</span><input type="checkbox" id="setHesapKoruma"></label>
+                        </div>
+                        <div class="settings-grid" style="margin-top:14px;">
+                            <div class="form-group">
+                                <label>⚡ Spam Mesaj Limiti</label>
+                                <input type="number" id="setSpamLimit" min="2" max="50" placeholder="5">
+                            </div>
+                            <div class="form-group">
+                                <label>⏱️ Spam Süre (ms)</label>
+                                <input type="number" id="setSpamSure" min="500" max="60000" placeholder="4000">
+                            </div>
+                            <div class="form-group">
+                                <label>🔕 Spam'de Sustur</label>
+                                <select id="setSpamSustur"><option value="true">Açık</option><option value="false">Kapalı</option></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🛡️ Hesap Koruma Log Kanalı</label>
+                                <select id="setHesapKanal"></select>
+                            </div>
+                            <div class="form-group" style="grid-column:1/-1;">
+                                <label>🚫 Yasaklı Kelimeler (virgülle ayır)</label>
+                                <input type="text" id="setYasakli" placeholder="kelime1, kelime2, kelime3">
+                            </div>
+                            <div class="form-group" style="grid-column:1/-1;">
+                                <label>🤬 Özel Küfür Kelimeleri (virgülle ayır)</label>
+                                <input type="text" id="setKufurKelimeler" placeholder="kelime1, kelime2">
+                            </div>
+                            <div class="form-group" style="grid-column:1/-1;">
+                                <label>✅ Link İzinli Siteler (virgülle ayır)</label>
+                                <input type="text" id="setIzinliLink" placeholder="youtube.com, github.com">
+                            </div>
                         </div>
                     </div>
 
                     <div class="setting-block">
-                        <h4 class="setting-section-title"><i class="fas fa-level-up-alt" style="color:var(--green);"></i> Seviye & Destek</h4>
+                        <h4 class="setting-section-title"><i class="fas fa-level-up-alt" style="color:var(--green);"></i> Seviye & XP</h4>
                         <div class="toggle-grid">
                             <label class="toggle-row"><span><i class="fas fa-star"></i> Seviye Sistemi</span><input type="checkbox" id="setLevel"></label>
                             <label class="toggle-row"><span><i class="fas fa-ticket-alt"></i> Destek Sistemi</span><input type="checkbox" id="setDestek"></label>
@@ -809,6 +862,108 @@
                             <div class="form-group">
                                 <label>🎬 Medya Kanalı</label>
                                 <select id="setMedya"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>💬 Mesaj Başına XP</label>
+                                <input type="number" id="setMesajXp" min="1" max="1000" placeholder="15">
+                            </div>
+                            <div class="form-group">
+                                <label>🎤 Ses XP (dakika başına)</label>
+                                <input type="number" id="setSesXp" min="1" max="1000" placeholder="10">
+                            </div>
+                            <div class="form-group">
+                                <label>📈 Level Başına XP</label>
+                                <input type="number" id="setLevelXp" min="1" max="10000" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-block">
+                        <h4 class="setting-section-title"><i class="fas fa-id-card" style="color:var(--teal);"></i> Kayıt Sistemi</h4>
+                        <div class="settings-grid">
+                            <div class="form-group">
+                                <label>📋 Kayıt Kanalı</label>
+                                <select id="setRegKanal"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🛡️ Kayıt Yetkilisi Rolü</label>
+                                <select id="setRegYetkili"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>👧 Kız Rolü</label>
+                                <select id="setRegKiz"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>👦 Erkek Rolü</label>
+                                <select id="setRegErkek"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🙍 Kayıtsız Rolü</label>
+                                <select id="setRegKayitsiz"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-block">
+                        <h4 class="setting-section-title"><i class="fas fa-gavel" style="color:var(--orange);"></i> Uyarı Sistemi</h4>
+                        <div class="settings-grid">
+                            <div class="form-group">
+                                <label>🔇 Uyarı Mute Rolü</label>
+                                <select id="setWarnMute"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>⛓️ Jail Rolü</label>
+                                <select id="setWarnJail"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🛡️ Uyarı Mod Rolü</label>
+                                <select id="setWarnMod"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>📋 Uyarı Log Kanalı</label>
+                                <select id="setWarnLog"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🔢 1. Mute Eşiği (uyarı sayısı)</label>
+                                <input type="number" id="setWarnEsik1" min="1" max="50" placeholder="3">
+                            </div>
+                            <div class="form-group">
+                                <label>🔢 2. Mute Eşiği (uyarı sayısı)</label>
+                                <input type="number" id="setWarnEsik2" min="1" max="50" placeholder="5">
+                            </div>
+                            <div class="form-group">
+                                <label>🔢 Jail Eşiği (uyarı sayısı)</label>
+                                <input type="number" id="setWarnJailEsik" min="1" max="50" placeholder="7">
+                            </div>
+                            <div class="form-group">
+                                <label>🔢 Ban Eşiği (uyarı sayısı)</label>
+                                <input type="number" id="setWarnBanEsik" min="1" max="50" placeholder="9">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-block">
+                        <h4 class="setting-section-title"><i class="fas fa-headset" style="color:var(--purple);"></i> Destek & Diğer</h4>
+                        <div class="settings-grid">
+                            <div class="form-group">
+                                <label>🎫 Ticket Kanalı</label>
+                                <select id="setTicketKanal"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🛡️ Ticket Yetkili Rolü</label>
+                                <select id="setTicketYetkili"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>⏳ Timeout Log Kanalı</label>
+                                <select id="setTimeoutKanal"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🛡️ Timeout Yetkili Rolü</label>
+                                <select id="setTimeoutYetkili"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>🎂 Doğum Günü Kanalı</label>
+                                <select id="setDogumKanal"></select>
                             </div>
                         </div>
                     </div>
@@ -1230,18 +1385,52 @@ const DEMO_GUILDS = [
                             welcomeChannel: DEMO_CHANNELS[0].id,
                             welcomeMessage: 'Hoş geldin {user}!',
                             leaveMessage: 'Görüşürüz {user}!',
+                            welcomeImageChannel: '',
+                            leaveImageChannel: '',
+                            tagChannel: '',
                             modLogChannel: '',
                             autoRole: DEMO_ROLES[3].id,
+                            botRole: '',
                             autoTag: '[EZB]',
                             levelSystem: true,
                             levelUpChannel: DEMO_CHANNELS[1].id,
+                            mesajXp: 15,
+                            sesXp: 10,
+                            levelXp: 100,
                             antiSwear: true,
                             antiCapslock: false,
                             antiAd: true,
                             antiLink: false,
+                            antiSpam: true,
+                            antiGif: false,
+                            accountProtection: false,
+                            accountProtectionChannel: '',
+                            bannedWords: [],
+                            swearWords: [],
+                            allowedLinks: ['youtube.com'],
+                            spamSettings: { limit: 5, sure: 4000, sustur: true },
+                            suggestionChannel: '',
+                            birthdayChannel: '',
                             supportSystem: false,
                             mutedRole: DEMO_ROLES[1].id,
-                            mediaChannel: ''
+                            mediaChannel: '',
+                            ticketChannel: '',
+                            ticketAuthorizedRole: '',
+                            timeoutLogChannel: '',
+                            timeoutAuthorizedRole: '',
+                            regChannel: '',
+                            regAuthorizedRole: '',
+                            regGirlRole: '',
+                            regBoyRole: '',
+                            regUnregisteredRole: '',
+                            warnMuteRole: '',
+                            warnJailRole: '',
+                            warnModRole: '',
+                            warnLogChannel: '',
+                            warnMuteThreshold: 3,
+                            warnMute2Threshold: 5,
+                            warnJailThreshold: 7,
+                            warnBanThreshold: 9
                         }
                     };
                 } else {
@@ -1255,21 +1444,58 @@ const DEMO_GUILDS = [
                 $('#setWelcome').value = s.welcomeMessage || '';
                 $('#setBye').value = s.leaveMessage || '';
                 $('#setOtoTag').value = s.autoTag || '';
+                $('#setYasakli').value = (s.bannedWords || []).join(', ');
+                $('#setKufurKelimeler').value = (s.swearWords || []).join(', ');
+                $('#setIzinliLink').value = (s.allowedLinks || []).join(', ');
+                $('#setMesajXp').value = s.mesajXp || '';
+                $('#setSesXp').value = s.sesXp || '';
+                $('#setLevelXp').value = s.levelXp || '';
+                $('#setWarnEsik1').value = s.warnMuteThreshold || '';
+                $('#setWarnEsik2').value = s.warnMute2Threshold || '';
+                $('#setWarnJailEsik').value = s.warnJailThreshold || '';
+                $('#setWarnBanEsik').value = s.warnBanThreshold || '';
 
                 $('#setWelcomeChannel').innerHTML = kanalSecici(s.welcomeChannel, 'Kanalsız');
+                $('#setWelcomeImg').innerHTML = kanalSecici(s.welcomeImageChannel, 'Kapalı');
+                $('#setLeaveImg').innerHTML = kanalSecici(s.leaveImageChannel, 'Kapalı');
+                $('#setTagKanal').innerHTML = kanalSecici(s.tagChannel, 'Kapalı');
                 $('#setModLog').innerHTML = kanalSecici(s.modLogChannel, 'Kapalı');
                 $('#setLevelKanal').innerHTML = kanalSecici(s.levelUpChannel, 'Kapalı');
                 $('#setMedya').innerHTML = kanalSecici(s.mediaChannel, 'Kapalı');
+                $('#setOneriKanal').innerHTML = kanalSecici(s.suggestionChannel, 'Kapalı');
+                $('#setHesapKanal').innerHTML = kanalSecici(s.accountProtectionChannel, 'Kapalı');
+                $('#setWarnLog').innerHTML = kanalSecici(s.warnLogChannel, 'Kapalı');
+                $('#setTicketKanal').innerHTML = kanalSecici(s.ticketChannel, 'Kapalı');
+                $('#setTimeoutKanal').innerHTML = kanalSecici(s.timeoutLogChannel, 'Kapalı');
+                $('#setDogumKanal').innerHTML = kanalSecici(s.birthdayChannel, 'Kapalı');
+                $('#setRegKanal').innerHTML = kanalSecici(s.regChannel, 'Kapalı');
 
                 $('#setMuteRol').innerHTML = rolSecici(s.mutedRole, 'Rol yok');
                 $('#setOtoRol').innerHTML = rolSecici(s.autoRole, 'Rol yok');
+                $('#setBotRol').innerHTML = rolSecici(s.botRole, 'Rol yok');
+                $('#setWarnMute').innerHTML = rolSecici(s.warnMuteRole, 'Rol yok');
+                $('#setWarnJail').innerHTML = rolSecici(s.warnJailRole, 'Rol yok');
+                $('#setWarnMod').innerHTML = rolSecici(s.warnModRole, 'Rol yok');
+                $('#setTicketYetkili').innerHTML = rolSecici(s.ticketAuthorizedRole, 'Rol yok');
+                $('#setTimeoutYetkili').innerHTML = rolSecici(s.timeoutAuthorizedRole, 'Rol yok');
+                $('#setRegYetkili').innerHTML = rolSecici(s.regAuthorizedRole, 'Rol yok');
+                $('#setRegKiz').innerHTML = rolSecici(s.regGirlRole, 'Rol yok');
+                $('#setRegErkek').innerHTML = rolSecici(s.regBoyRole, 'Rol yok');
+                $('#setRegKayitsiz').innerHTML = rolSecici(s.regUnregisteredRole, 'Rol yok');
 
                 $('#setKufur').checked = !!s.antiSwear;
                 $('#setCapslock').checked = !!s.antiCapslock;
                 $('#setReklam').checked = !!s.antiAd;
                 $('#setLink').checked = !!s.antiLink;
+                $('#setSpam').checked = !!s.antiSpam;
+                $('#setGif').checked = !!s.antiGif;
+                $('#setHesapKoruma').checked = !!s.accountProtection;
                 $('#setLevel').checked = !!s.levelSystem;
                 $('#setDestek').checked = !!s.supportSystem;
+
+                $('#setSpamSustur').value = (s.spamSettings && s.spamSettings.sustur === false) ? 'false' : 'true';
+                $('#setSpamLimit').value = (s.spamSettings && s.spamSettings.limit) || 5;
+                $('#setSpamSure').value = (s.spamSettings && s.spamSettings.sure) || 4000;
 
                 $('#ayarForm').style.display = 'block';
             } catch (err) {
@@ -1295,18 +1521,56 @@ const DEMO_GUILDS = [
                 ['welcomeChannel', $('#setWelcomeChannel').value],
                 ['welcomeMessage', $('#setWelcome').value.trim()],
                 ['leaveMessage', $('#setBye').value.trim()],
+                ['welcomeImageChannel', $('#setWelcomeImg').value],
+                ['leaveImageChannel', $('#setLeaveImg').value],
+                ['tagChannel', $('#setTagKanal').value],
                 ['modLogChannel', $('#setModLog').value],
                 ['autoRole', $('#setOtoRol').value],
+                ['botRole', $('#setBotRol').value],
                 ['autoTag', $('#setOtoTag').value.trim()],
                 ['levelSystem', $('#setLevel').checked],
                 ['levelUpChannel', $('#setLevelKanal').value],
+                ['mesajXp', parseInt($('#setMesajXp').value, 10) || null],
+                ['sesXp', parseInt($('#setSesXp').value, 10) || null],
+                ['levelXp', parseInt($('#setLevelXp').value, 10) || null],
                 ['antiSwear', $('#setKufur').checked],
                 ['antiCapslock', $('#setCapslock').checked],
                 ['antiAd', $('#setReklam').checked],
                 ['antiLink', $('#setLink').checked],
+                ['antiSpam', $('#setSpam').checked],
+                ['antiGif', $('#setGif').checked],
+                ['accountProtection', $('#setHesapKoruma').checked],
+                ['accountProtectionChannel', $('#setHesapKanal').value],
+                ['spamSettings', {
+                    limit: parseInt($('#setSpamLimit').value, 10) || 5,
+                    sure: parseInt($('#setSpamSure').value, 10) || 4000,
+                    sustur: $('#setSpamSustur').value === 'true'
+                }],
+                ['bannedWords', $('#setYasakli').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean)],
+                ['swearWords', $('#setKufurKelimeler').value.split(',').map(s => s.trim().toLowerCase()).filter(Boolean)],
+                ['allowedLinks', $('#setIzinliLink').value.split(',').map(s => s.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '')).filter(Boolean)],
+                ['suggestionChannel', $('#setOneriKanal').value],
+                ['birthdayChannel', $('#setDogumKanal').value],
                 ['supportSystem', $('#setDestek').checked],
                 ['mutedRole', $('#setMuteRol').value],
-                ['mediaChannel', $('#setMedya').value]
+                ['mediaChannel', $('#setMedya').value],
+                ['ticketChannel', $('#setTicketKanal').value],
+                ['ticketAuthorizedRole', $('#setTicketYetkili').value],
+                ['timeoutLogChannel', $('#setTimeoutKanal').value],
+                ['timeoutAuthorizedRole', $('#setTimeoutYetkili').value],
+                ['regChannel', $('#setRegKanal').value],
+                ['regAuthorizedRole', $('#setRegYetkili').value],
+                ['regGirlRole', $('#setRegKiz').value],
+                ['regBoyRole', $('#setRegErkek').value],
+                ['regUnregisteredRole', $('#setRegKayitsiz').value],
+                ['warnMuteRole', $('#setWarnMute').value],
+                ['warnJailRole', $('#setWarnJail').value],
+                ['warnModRole', $('#setWarnMod').value],
+                ['warnLogChannel', $('#setWarnLog').value],
+                ['warnMuteThreshold', parseInt($('#setWarnEsik1').value, 10) || null],
+                ['warnMute2Threshold', parseInt($('#setWarnEsik2').value, 10) || null],
+                ['warnJailThreshold', parseInt($('#setWarnJailEsik').value, 10) || null],
+                ['warnBanThreshold', parseInt($('#setWarnBanEsik').value, 10) || null]
             ];
 
             let hata = null;
